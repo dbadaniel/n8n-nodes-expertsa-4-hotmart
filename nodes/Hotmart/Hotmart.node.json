@@ -1,5 +1,5 @@
 {
-    "node": "n8n-nodes-hotmart-api.Hotmart",
+    "node": "n8n-nodes-expertsa-4-hotmart.Hotmart",
     "nodeVersion": "1.0",
     "codexVersion": "1.0",
     "categories": [

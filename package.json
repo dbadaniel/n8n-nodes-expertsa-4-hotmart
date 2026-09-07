@@ -1,5 +1,5 @@
 {
-  "name": "n8n-nodes-hotmart-api",
+  "name": "n8n-nodes-expertsa-4-hotmart",
   "version": "1.1.1",
   "description": "n8n community node for Hotmart API integration - Full coverage for Sales, Subscriptions, Products, Members Area, Events, Installments and more",
   "keywords": [
@@ -12,14 +12,14 @@
     "members"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/luccamrofc/n8n-nodes-hotmart-api.git",
+  "homepage": "https://github.com/dbadaniel/n8n-nodes-expertsa-4-hotmart#readme",
   "author": {
-    "name": "Lucca Maia",
-    "email": "lucmairod2@gmail.com"
+    "name": "Expertsa",
+    "email": "expertsa.oficial@gmail.com"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/luccamrofc/n8n-nodes-hotmart-api.git"
+    "url": "git+https://github.com/dbadaniel/n8n-nodes-expertsa-4-hotmart.git"
   },
   "engines": {
     "node": ">=18.17.0"

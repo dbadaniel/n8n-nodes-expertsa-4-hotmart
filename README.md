@@ -1,4 +1,14 @@
-# n8n-nodes-hotmart-api
+<p align="center">
+  <img src="Exsa-azul.png" alt="Expertsa" width="220" />
+</p>
+
+<p align="center">
+  <em>Soluções de Expert para Expert.</em>
+</p>
+
+---
+
+# n8n-nodes-expertsa-4-hotmart
 
 Este é o **community node definitivo** para integração com a [Hotmart](https://www.hotmart.com) no n8n. 
 
@@ -6,7 +16,7 @@ Projetado para atender tanto **infoprodutores individuais** quanto **agências e
 
 ## 🚀 Por que este node é diferente?
 
-A maioria das integrações são básicas. Este node foi construído com problemas do mundo real em mente:
+Aqui você encontra coisas que fazem parte do meu dia a dia de infoprodutor e sei que pode servir para outros. A maioria das integrações são básicas, mas este node foi construído com problemas e necessidades do mundo real em mente:
 
 ### 1. 🔐 Autenticação Flexível (Game Changer)
 O único node que suporta nativamente dois modos de operação:
@@ -126,24 +136,36 @@ Abaixo a lista completa de operações suportadas:
 Siga o [guia de instalação](https://docs.n8n.io/integrations/community-nodes/installation/) na documentação de community nodes do n8n.
 
 ### Via Interface (Recomendado)
-1. Vá em **Settings > Community Nodes**
-2. Clique em **Install**
-3. Digite: `n8n-nodes-hotmart-api`
+1. No seu n8n, vá em **Settings > Community Nodes**
+2. Clique em **Install a community node**
+3. No campo de busca, digite: `n8n-nodes-expertsa-4-hotmart`
+4. Marque a caixa confirmando os termos e clique em **Install**
 
-### Via NPM
+### Via Terminal / Docker (NPM)
+Para instâncias locais ou baseadas em Docker (instalado no diretório do n8n):
 ```bash
-npm install n8n-nodes-hotmart-api
+npm install n8n-nodes-expertsa-4-hotmart
 ```
+
+---
+
+## 🚀 Conheça também: Expertsa Groups
+
+Você gerencia grupos de WhatsApp para seus lançamentos, turmas e comunidades de alunos?
+
+Conheça o **Expertsa Groups** — o sistema definitivo de gerenciamento e automação de grupos de WhatsApp, desenvolvido de expert para expert para escalar a sua operação de infoprodutos com tranquilidade e controle total.
+
+> 📲 Quer saber mais e otimizar a gestão dos seus grupos? Entre em contato pelo e-mail [expertsa.oficial@gmail.com](mailto:expertsa.oficial@gmail.com).
 
 ---
 
 ## ☕ Apoie o Projeto
 
-Este node é mantido pela comunidade e forçado por necessidades reais de grandes operações. Se ele economizou horas do seu trabalho ou permitiu que você ganhasse dinheiro automatizando processos, considere apoiar:
+Este node é mantido com dedicação por quem vive os desafios reais de grandes operações digitais. Se ele economizou horas do seu trabalho ou permitiu que você ganhasse dinheiro automatizando processos, considere apoiar:
 
-**Chave Pix:** `2858d3fb-4256-4e31-a58c-84d6c3ffde25`
+**Chave Pix:** `expertsa.oficial@gmail.com`
 
-Qualquer valor ajuda a manter as atualizações constantes e a paridade com a API oficial! 💜
+Qualquer valor ajuda a manter as atualizações constantes e a paridade com a API oficial da Hotmart! 💜
 
 ---
 
