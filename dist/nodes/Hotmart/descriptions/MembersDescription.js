@@ -14,6 +14,12 @@ exports.membersOperations = [
         },
         options: [
             {
+                name: 'Progresso do Aluno',
+                value: 'getStudentProgress',
+                description: 'Obter progresso do aluno (resumo com % ou histórico detalhado de aulas)',
+                action: 'Obter progresso do aluno',
+            },
+            {
                 name: 'Listar Alunos',
                 value: 'getStudents',
                 description: 'Obter lista de alunos da área de membros',
@@ -21,7 +27,10 @@ exports.membersOperations = [
                 routing: {
                     request: {
                         method: 'GET',
-                        url: '=/club/api/v2/{{$parameter.subdomain}}/users',
+                        url: '/club/api/v1/users',
+                        qs: {
+                            subdomain: '={{$parameter.subdomain}}',
+                        },
                     },
                     output: {
                         postReceive: [
@@ -43,7 +52,10 @@ exports.membersOperations = [
                 routing: {
                     request: {
                         method: 'GET',
-                        url: '=/club/api/v2/{{$parameter.subdomain}}/modules',
+                        url: '/club/api/v1/modules',
+                        qs: {
+                            subdomain: '={{$parameter.subdomain}}',
+                        },
                     },
                     output: {
                         postReceive: [
@@ -65,24 +77,15 @@ exports.membersOperations = [
                 routing: {
                     request: {
                         method: 'GET',
-                        url: '=/club/api/v2/{{$parameter.subdomain}}/modules/{{$parameter.moduleId}}/pages',
-                    },
-                },
-            },
-            {
-                name: 'Progresso do Aluno',
-                value: 'getStudentProgress',
-                description: 'Obter progresso de um aluno em um produto',
-                action: 'Obter progresso do aluno',
-                routing: {
-                    request: {
-                        method: 'GET',
-                        url: '=/club/api/v2/{{$parameter.subdomain}}/users/{{$parameter.userId}}/progress',
+                        url: '=/club/api/v1/modules/{{$parameter.moduleId}}/pages',
+                        qs: {
+                            subdomain: '={{$parameter.subdomain}}',
+                        },
                     },
                 },
             },
         ],
-        default: 'getStudents',
+        default: 'getStudentProgress',
     },
 ];
 exports.membersFields = [
@@ -94,11 +97,36 @@ exports.membersFields = [
         displayOptions: {
             show: {
                 resource: ['members'],
-                operation: ['getStudents', 'getModules', 'getPages', 'getStudentProgress'],
+                operation: ['getStudents', 'getModules', 'getPages', 'getStudentProgress', 'getStudentsProgress'],
             },
         },
         default: '',
         description: 'O subdomínio da sua área de membros (ex: "meuproduto" de meuproduto.club.hotmart.com)',
+    },
+    {
+        displayName: 'Modo de Visualização',
+        name: 'progressMode',
+        type: 'options',
+        options: [
+            {
+                name: 'Porcentagem / Resumo Geral',
+                value: 'summary',
+                description: 'Traz a % de conclusão, total de aulas e aulas feitas (com filtro opcional por email)',
+            },
+            {
+                name: 'Aulas Detalhadas (Lição por Lição)',
+                value: 'detailed',
+                description: 'Traz o status detalhado de cada aula/lição do curso assistida pelo aluno',
+            },
+        ],
+        default: 'summary',
+        displayOptions: {
+            show: {
+                resource: ['members'],
+                operation: ['getStudentProgress'],
+            },
+        },
+        description: 'Escolha se deseja o resumo de conclusão com a porcentagem (%) ou o detalhamento aula por aula',
     },
     {
         displayName: 'ID do Produto',
@@ -135,27 +163,16 @@ exports.membersFields = [
         description: 'O ID do módulo para obter as páginas',
     },
     {
-        displayName: 'ID do Usuário',
-        name: 'userId',
-        type: 'string',
-        required: true,
-        displayOptions: {
-            show: {
-                resource: ['members'],
-                operation: ['getStudentProgress'],
-            },
-        },
-        default: '',
-        description: 'O ID do aluno/usuário',
-    },
-    {
         displayName: 'Retornar Todos',
         name: 'returnAll',
         type: 'boolean',
         displayOptions: {
             show: {
                 resource: ['members'],
-                operation: ['getStudents', 'getModules', 'getPages'],
+                operation: ['getStudents', 'getModules', 'getPages', 'getStudentProgress', 'getStudentsProgress'],
+            },
+            hide: {
+                progressMode: ['detailed'],
             },
         },
         default: false,
@@ -168,8 +185,11 @@ exports.membersFields = [
         displayOptions: {
             show: {
                 resource: ['members'],
-                operation: ['getStudents', 'getModules', 'getPages'],
+                operation: ['getStudents', 'getModules', 'getPages', 'getStudentProgress', 'getStudentsProgress'],
                 returnAll: [false],
+            },
+            hide: {
+                progressMode: ['detailed'],
             },
         },
         typeOptions: {
@@ -184,6 +204,37 @@ exports.membersFields = [
                 property: 'max_results',
             },
         },
+    },
+    {
+        displayName: 'Filtros',
+        name: 'filters',
+        type: 'collection',
+        placeholder: 'Adicionar Filtro',
+        default: {},
+        displayOptions: {
+            show: {
+                resource: ['members'],
+                operation: ['getStudentProgress'],
+            },
+        },
+        options: [
+            {
+                displayName: 'Email',
+                name: 'email',
+                type: 'string',
+                default: '',
+                placeholder: 'ex: aluno@email.com',
+                description: 'Filtrar por e-mail do aluno',
+            },
+            {
+                displayName: 'ID do Aluno (user_id)',
+                name: 'userId',
+                type: 'string',
+                default: '',
+                placeholder: 'ex: 12345678',
+                description: 'Filtrar por ID do aluno na Hotmart',
+            },
+        ],
     },
     {
         displayName: 'Filtros',

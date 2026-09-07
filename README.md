@@ -29,7 +29,7 @@ Chega de workflows "spaghetti" cheios de `IF` nodes logo após o webhook. O **Ho
 - **Super Flow**: Agrupa eventos por contexto de negócio (Ex: Saída "Nova Assinatura" vs "Renovação").
 - **Auto-Parser**: Dados complexos e aninhados (`data.subscriber`, `data.product`, `data.plans`) são extraídos e limpos automaticamente para o primeiro nível do JSON.
 
-### 3. ⚡ Cobertura Total da API (v2)
+### 3. ⚡ Cobertura Completa da API (REST & Webhook 2.0)
 Não apenas o básico. Acesso completo a:
 - Vendas e Reembolsos
 - Assinaturas (com cancelamento e reativação em lote)
