@@ -10,9 +10,9 @@
 
 # n8n-nodes-expertsa-4-hotmart
 
-Este é o **community node definitivo** para integração com a [Hotmart](https://www.hotmart.com) no n8n. 
+A integração definitiva entre a [Hotmart](https://www.hotmart.com) e o n8n.
 
-Projetado para atender tanto **infoprodutores individuais** quanto **agências e plataformas SaaS** que precisam escalar automações para múltiplas contas.
+Desenvolvido a partir das dores e necessidades reais de quem gerencia operações digitais no dia a dia. Chega de fluxos frágeis e integrações limitadas: uma solução completa, robusta e pronta para rodar suas automações no mais alto padrão de qualidade.
 
 ## 🚀 Por que este node é diferente?
 
@@ -166,7 +166,7 @@ Você gerencia grupos de WhatsApp para seus lançamentos, turmas e comunidades d
 
 Conheça o **Expertsa Groups** — o sistema definitivo de gerenciamento e automação de grupos de WhatsApp, desenvolvido de expert para expert para escalar a sua operação de infoprodutos com tranquilidade e controle total.
 
-> 📲 Quer saber mais e otimizar a gestão dos seus grupos? Entre em contato pelo e-mail [expertsa.oficial@gmail.com](mailto:expertsa.oficial@gmail.com).
+> 📲 Quer saber mais e otimizar a gestão dos seus grupos? Acesse [expertsa.com.br](https://expertsa.com.br).
 
 ---
 
