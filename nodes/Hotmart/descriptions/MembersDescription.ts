@@ -13,6 +13,12 @@ export const membersOperations: INodeProperties[] = [
         },
         options: [
             {
+                name: 'Progresso do Aluno',
+                value: 'getStudentProgress',
+                description: 'Obter progresso do aluno (resumo com % ou histórico detalhado de aulas)',
+                action: 'Obter progresso do aluno',
+            },
+            {
                 name: 'Listar Alunos',
                 value: 'getStudents',
                 description: 'Obter lista de alunos da área de membros',
@@ -20,7 +26,10 @@ export const membersOperations: INodeProperties[] = [
                 routing: {
                     request: {
                         method: 'GET',
-                        url: '=/club/api/v2/{{$parameter.subdomain}}/users',
+                        url: '/club/api/v1/users',
+                        qs: {
+                            subdomain: '={{$parameter.subdomain}}',
+                        },
                     },
                     output: {
                         postReceive: [
@@ -42,7 +51,10 @@ export const membersOperations: INodeProperties[] = [
                 routing: {
                     request: {
                         method: 'GET',
-                        url: '=/club/api/v2/{{$parameter.subdomain}}/modules',
+                        url: '/club/api/v1/modules',
+                        qs: {
+                            subdomain: '={{$parameter.subdomain}}',
+                        },
                     },
                     output: {
                         postReceive: [
@@ -64,24 +76,15 @@ export const membersOperations: INodeProperties[] = [
                 routing: {
                     request: {
                         method: 'GET',
-                        url: '=/club/api/v2/{{$parameter.subdomain}}/modules/{{$parameter.moduleId}}/pages',
-                    },
-                },
-            },
-            {
-                name: 'Progresso do Aluno',
-                value: 'getStudentProgress',
-                description: 'Obter progresso de um aluno em um produto',
-                action: 'Obter progresso do aluno',
-                routing: {
-                    request: {
-                        method: 'GET',
-                        url: '=/club/api/v2/{{$parameter.subdomain}}/users/{{$parameter.userId}}/progress',
+                        url: '=/club/api/v1/modules/{{$parameter.moduleId}}/pages',
+                        qs: {
+                            subdomain: '={{$parameter.subdomain}}',
+                        },
                     },
                 },
             },
         ],
-        default: 'getStudents',
+        default: 'getStudentProgress',
     },
 ];
 
@@ -97,11 +100,39 @@ export const membersFields: INodeProperties[] = [
         displayOptions: {
             show: {
                 resource: ['members'],
-                operation: ['getStudents', 'getModules', 'getPages', 'getStudentProgress'],
+                operation: ['getStudents', 'getModules', 'getPages', 'getStudentProgress', 'getStudentsProgress'],
             },
         },
         default: '',
         description: 'O subdomínio da sua área de membros (ex: "meuproduto" de meuproduto.club.hotmart.com)',
+    },
+    // ----------------------------------
+    //         Progresso do Aluno: Modo de Visualização
+    // ----------------------------------
+    {
+        displayName: 'Modo de Visualização',
+        name: 'progressMode',
+        type: 'options',
+        options: [
+            {
+                name: 'Porcentagem / Resumo Geral',
+                value: 'summary',
+                description: 'Traz a % de conclusão, total de aulas e aulas feitas (com filtro opcional por email)',
+            },
+            {
+                name: 'Aulas Detalhadas (Lição por Lição)',
+                value: 'detailed',
+                description: 'Traz o status detalhado de cada aula/lição do curso assistida pelo aluno',
+            },
+        ],
+        default: 'summary',
+        displayOptions: {
+            show: {
+                resource: ['members'],
+                operation: ['getStudentProgress'],
+            },
+        },
+        description: 'Escolha se deseja o resumo de conclusão com a porcentagem (%) ou o detalhamento aula por aula',
     },
     // ----------------------------------
     //         Listar Páginas
@@ -141,24 +172,7 @@ export const membersFields: INodeProperties[] = [
         description: 'O ID do módulo para obter as páginas',
     },
     // ----------------------------------
-    //         Progresso do Aluno
-    // ----------------------------------
-    {
-        displayName: 'ID do Usuário',
-        name: 'userId',
-        type: 'string',
-        required: true,
-        displayOptions: {
-            show: {
-                resource: ['members'],
-                operation: ['getStudentProgress'],
-            },
-        },
-        default: '',
-        description: 'O ID do aluno/usuário',
-    },
-    // ----------------------------------
-    //         Listar Alunos / Módulos
+    //         Listar Alunos / Módulos / Paginação
     // ----------------------------------
     {
         displayName: 'Retornar Todos',
@@ -167,7 +181,10 @@ export const membersFields: INodeProperties[] = [
         displayOptions: {
             show: {
                 resource: ['members'],
-                operation: ['getStudents', 'getModules', 'getPages'],
+                operation: ['getStudents', 'getModules', 'getPages', 'getStudentProgress', 'getStudentsProgress'],
+            },
+            hide: {
+                progressMode: ['detailed'],
             },
         },
         default: false,
@@ -180,8 +197,11 @@ export const membersFields: INodeProperties[] = [
         displayOptions: {
             show: {
                 resource: ['members'],
-                operation: ['getStudents', 'getModules', 'getPages'],
+                operation: ['getStudents', 'getModules', 'getPages', 'getStudentProgress', 'getStudentsProgress'],
                 returnAll: [false],
+            },
+            hide: {
+                progressMode: ['detailed'],
             },
         },
         typeOptions: {
@@ -197,6 +217,43 @@ export const membersFields: INodeProperties[] = [
             },
         },
     },
+    // ----------------------------------
+    //         Filtros: Progresso do Aluno (Apenas Email e ID)
+    // ----------------------------------
+    {
+        displayName: 'Filtros',
+        name: 'filters',
+        type: 'collection',
+        placeholder: 'Adicionar Filtro',
+        default: {},
+        displayOptions: {
+            show: {
+                resource: ['members'],
+                operation: ['getStudentProgress'],
+            },
+        },
+        options: [
+            {
+                displayName: 'Email',
+                name: 'email',
+                type: 'string',
+                default: '',
+                placeholder: 'ex: aluno@email.com',
+                description: 'Filtrar por e-mail do aluno',
+            },
+            {
+                displayName: 'ID do Aluno (user_id)',
+                name: 'userId',
+                type: 'string',
+                default: '',
+                placeholder: 'ex: 12345678',
+                description: 'Filtrar por ID do aluno na Hotmart',
+            },
+        ],
+    },
+    // ----------------------------------
+    //         Filtros: Listar Alunos / Módulos
+    // ----------------------------------
     {
         displayName: 'Filtros',
         name: 'filters',

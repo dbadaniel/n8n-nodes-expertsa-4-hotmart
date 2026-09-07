@@ -300,17 +300,24 @@ export class Hotmart implements INodeType {
                         endpoint = '/payments/api/v1/sales/commissions';
                     } else if (operation === 'getPriceDetails') {
                         endpoint = '/payments/api/v1/sales/price/details';
+                    } else if (operation === 'getUsers') {
+                        endpoint = '/payments/api/v1/sales/users';
+                    } else if (operation === 'refund') {
+                        const transactionCode = this.getNodeParameter('transactionCode', i) as string;
+                        endpoint = `/payments/api/v1/sales/${transactionCode}/refund`;
+                        method = 'PUT';
                     }
 
-                    // Aplicar filtros
-                    const filters = this.getNodeParameter('filters', i, {}) as IDataObject;
-                    Object.assign(qs, filters);
+                    // Aplicar filtros e limite para operações de consulta
+                    if (['getAll', 'getCommissions', 'getPriceDetails', 'getSummary', 'getUsers'].includes(operation)) {
+                        const filters = this.getNodeParameter('filters', i, {}) as IDataObject;
+                        Object.assign(qs, filters);
 
-                    // Aplicar limite
-                    const returnAll = this.getNodeParameter('returnAll', i, false) as boolean;
-                    if (!returnAll) {
-                        const limit = this.getNodeParameter('limit', i, 50) as number;
-                        qs.max_results = limit;
+                        const returnAll = this.getNodeParameter('returnAll', i, false) as boolean;
+                        if (!returnAll && operation !== 'getSummary') {
+                            const limit = this.getNodeParameter('limit', i, 50) as number;
+                            qs.max_results = limit;
+                        }
                     }
                 }
 
@@ -321,26 +328,53 @@ export class Hotmart implements INodeType {
                         endpoint = '/payments/api/v1/subscriptions/summary';
                     } else if (operation === 'getPurchases') {
                         endpoint = '/payments/api/v1/subscriptions/purchases';
+                    } else if (operation === 'getTransactions') {
+                        endpoint = '/payments/api/v1/subscriptions/transactions';
+                    } else if (operation === 'getSubscriberPurchases') {
+                        const subscriberCode = this.getNodeParameter('subscriberCode', i) as string;
+                        endpoint = `/payments/api/v1/subscriptions/${subscriberCode}/purchases`;
                     } else if (operation === 'cancel') {
                         const subscriberCode = this.getNodeParameter('subscriberCode', i) as string;
                         endpoint = `/payments/api/v1/subscriptions/${subscriberCode}/cancel`;
                         method = 'POST';
                         const sendMail = this.getNodeParameter('sendMail', i, true) as boolean;
                         qs.send_mail = sendMail;
+                    } else if (operation === 'cancelBatch') {
+                        endpoint = '/payments/api/v1/subscriptions/cancel';
+                        method = 'POST';
+                        const subscriberCodesStr = this.getNodeParameter('subscriberCodes', i, '') as string;
+                        const sendMail = this.getNodeParameter('sendMail', i, true) as boolean;
+                        const subscriberCodes = subscriberCodesStr.split(',').map(s => s.trim()).filter(Boolean);
+                        body = {
+                            subscriber_code: subscriberCodes,
+                            send_mail: sendMail,
+                        };
                     } else if (operation === 'reactivate') {
                         const subscriberCode = this.getNodeParameter('subscriberCode', i) as string;
                         endpoint = `/payments/api/v1/subscriptions/${subscriberCode}/reactivate`;
                         method = 'POST';
+                        const charge = this.getNodeParameter('charge', i, false) as boolean;
+                        qs.charge = charge;
+                    } else if (operation === 'reactivateBatch') {
+                        endpoint = '/payments/api/v1/subscriptions/reactivate';
+                        method = 'POST';
+                        const subscriberCodesStr = this.getNodeParameter('subscriberCodes', i, '') as string;
+                        const charge = this.getNodeParameter('charge', i, false) as boolean;
+                        const subscriberCodes = subscriberCodesStr.split(',').map(s => s.trim()).filter(Boolean);
+                        body = {
+                            subscriber_code: subscriberCodes,
+                            charge,
+                        };
                     } else if (operation === 'changeBillingDate') {
                         const subscriberCode = this.getNodeParameter('subscriberCode', i) as string;
-                        endpoint = `/payments/api/v1/subscriptions/${subscriberCode}/charge-date`;
+                        endpoint = `/payments/api/v1/subscriptions/${subscriberCode}`;
                         method = 'PATCH';
                         const dueDay = this.getNodeParameter('dueDay', i) as number;
                         body = { due_day: dueDay };
                     }
 
                     // Aplicar filtros para operações de listagem
-                    if (['getAll', 'getSummary', 'getPurchases'].includes(operation)) {
+                    if (['getAll', 'getSummary', 'getPurchases', 'getTransactions'].includes(operation)) {
                         const filters = this.getNodeParameter('filters', i, {}) as IDataObject;
                         Object.assign(qs, filters);
 
@@ -358,33 +392,116 @@ export class Hotmart implements INodeType {
 
                         const filters = this.getNodeParameter('filters', i, {}) as IDataObject;
                         Object.assign(qs, filters);
+                    } else if (operation === 'getOffers') {
+                        const productUcode = this.getNodeParameter('productUcode', i) as string;
+                        endpoint = `/products/api/v1/products/${productUcode}/offers`;
+                    } else if (operation === 'getPlans') {
+                        const productUcode = this.getNodeParameter('productUcode', i) as string;
+                        endpoint = `/products/api/v1/products/${productUcode}/plans`;
+                    }
 
-                        const returnAll = this.getNodeParameter('returnAll', i, false) as boolean;
-                        if (!returnAll) {
-                            const limit = this.getNodeParameter('limit', i, 50) as number;
-                            qs.max_results = limit;
-                        }
+                    const returnAll = this.getNodeParameter('returnAll', i, false) as boolean;
+                    if (!returnAll) {
+                        const limit = this.getNodeParameter('limit', i, 50) as number;
+                        qs.max_results = limit;
                     }
                 }
 
                 if (resource === 'members') {
                     const subdomain = this.getNodeParameter('subdomain', i) as string;
+                    qs.subdomain = subdomain;
 
-                    if (operation === 'getStudents') {
-                        endpoint = `/club/api/v2/${subdomain}/users`;
+                    if (operation === 'getStudents' || operation === 'getStudentsProgress') {
+                        endpoint = '/club/api/v1/users';
                     } else if (operation === 'getModules') {
-                        endpoint = `/club/api/v2/${subdomain}/modules`;
+                        endpoint = '/club/api/v1/modules';
                     } else if (operation === 'getPages') {
                         const moduleId = this.getNodeParameter('moduleId', i) as string;
-                        endpoint = `/club/api/v2/${subdomain}/modules/${moduleId}/pages`;
+                        endpoint = `/club/api/v1/modules/${moduleId}/pages`;
+                        const productId = this.getNodeParameter('productId', i, 0) as number;
+                        if (productId) {
+                            qs.product_id = productId;
+                        }
                     } else if (operation === 'getStudentProgress') {
-                        const userId = this.getNodeParameter('userId', i) as string;
-                        endpoint = `/club/api/v2/${subdomain}/users/${userId}/progress`;
+                        const progressMode = this.getNodeParameter('progressMode', i, 'summary') as string;
+                        const filters = this.getNodeParameter('filters', i, {}) as IDataObject;
+
+                        if (progressMode === 'summary') {
+                            endpoint = '/club/api/v1/users';
+                            if (filters.email) {
+                                qs.email = (filters.email as string).trim().replace(/["']/g, '');
+                            }
+                            if (filters.name) {
+                                qs.name = filters.name;
+                            }
+                            if (filters.status) {
+                                qs.status = filters.status;
+                            }
+                        } else {
+                            // Modo detalhado: aceita ID interno ou E-mail do aluno a partir de filters
+                            let userId = ((filters.userId as string) || '').trim().replace(/["']/g, '');
+                            const email = ((filters.email as string) || '').trim().replace(/["']/g, '');
+
+                            if (!userId && !email) {
+                                throw new NodeApiError(this.getNode(), {
+                                    message: `No modo "Aulas Detalhadas", adicione o filtro "Email" ou "ID do Aluno (user_id)" para especificar qual aluno deseja consultar.`,
+                                } as JsonObject);
+                            }
+
+                            const searchEmail = (email || (userId.includes('@') ? userId : '')).toLowerCase();
+                            if (searchEmail) {
+                                let pageToken: string | undefined = undefined;
+                                let foundUserId = '';
+
+                                do {
+                                    const userLookupQs: IDataObject = {
+                                        subdomain,
+                                        max_results: 500,
+                                    };
+                                    if (pageToken) {
+                                        userLookupQs.page_token = pageToken;
+                                    }
+
+                                    const userLookup = await this.helpers.httpRequest({
+                                        method: 'GET',
+                                        url: `${itemBaseUrl}/club/api/v1/users`,
+                                        headers: {
+                                            Authorization: `Bearer ${itemAccessToken}`,
+                                            'Content-Type': 'application/json',
+                                        },
+                                        qs: userLookupQs,
+                                        json: true,
+                                    }) as { items?: Array<IDataObject>; page_token?: string };
+
+                                    const foundUser = userLookup?.items?.find((u: IDataObject) =>
+                                        String(u.email || '').trim().toLowerCase() === searchEmail
+                                    );
+
+                                    if (foundUser && (foundUser.user_id || foundUser.id)) {
+                                        foundUserId = String(foundUser.user_id || foundUser.id);
+                                        break;
+                                    }
+
+                                    pageToken = userLookup?.page_token;
+                                } while (pageToken);
+
+                                if (foundUserId) {
+                                    userId = foundUserId;
+                                } else {
+                                    throw new NodeApiError(this.getNode(), {
+                                        message: `Nenhum aluno encontrado com o e-mail "${searchEmail}" na área de membros "${subdomain}".`,
+                                    } as JsonObject);
+                                }
+                            }
+
+                            endpoint = `/club/api/v1/users/${userId}/lessons`;
+                        }
                     }
 
                     // Aplicar filtros para operações de listagem
-                    if (['getStudents', 'getModules', 'getPages'].includes(operation)) {
-                        if (operation === 'getStudents') {
+                    const isSummaryProgress = operation === 'getStudentProgress' && this.getNodeParameter('progressMode', i, 'summary') === 'summary';
+                    if (['getStudents', 'getStudentsProgress', 'getModules', 'getPages'].includes(operation) || isSummaryProgress) {
+                        if (['getStudents', 'getStudentsProgress', 'getModules'].includes(operation)) {
                             const filters = this.getNodeParameter('filters', i, {}) as IDataObject;
                             Object.assign(qs, filters);
                         }
@@ -524,21 +641,59 @@ export class Hotmart implements INodeType {
 
                 // Tratar resposta
                 if (response.items && Array.isArray(response.items)) {
+                    // Se for getStudentsProgress ou getStudentProgress no modo summary, formatar dados de progresso no primeiro nível
+                    const isProgressSummary =
+                        operation === 'getStudentsProgress' ||
+                        (operation === 'getStudentProgress' && this.getNodeParameter('progressMode', i, 'summary') === 'summary');
+
+                    let itemsToProcess = isProgressSummary
+                        ? response.items.map((student: IDataObject) => {
+                            const progress = (student.progress as IDataObject) || {};
+                            const completedPercentage = progress.completed_percentage !== undefined ? Number(progress.completed_percentage) : 0;
+                            const completedLessons = progress.completed !== undefined ? Number(progress.completed) : 0;
+                            const totalLessons = progress.total !== undefined ? Number(progress.total) : 0;
+                            return {
+                                name: student.name,
+                                email: student.email,
+                                user_id: student.user_id || student.id,
+                                completed_percentage: completedPercentage,
+                                completed_lessons: completedLessons,
+                                total_lessons: totalLessons,
+                                is_completed: completedPercentage >= 100,
+                                status: student.status,
+                                last_access_date: student.last_access_date || null,
+                                access_count: student.access_count ?? null,
+                            };
+                        })
+                        : response.items;
+
+                    if (isProgressSummary) {
+                        const filters = this.getNodeParameter('filters', i, {}) as IDataObject;
+                        if (filters?.email) {
+                            const targetEmail = String(filters.email).trim().toLowerCase();
+                            itemsToProcess = itemsToProcess.filter((s: IDataObject) => String(s.email || '').trim().toLowerCase() === targetEmail);
+                        }
+                        if (filters?.userId) {
+                            const targetId = String(filters.userId).trim();
+                            itemsToProcess = itemsToProcess.filter((s: IDataObject) => String(s.user_id || s.id || '').trim() === targetId);
+                        }
+                    }
+
                     if (includePaginationMetadata) {
                         // Retornar com metadados para AI Agents
                         returnData.push({
                             json: {
                                 _metadata: {
-                                    items_returned: response.items.length,
+                                    items_returned: itemsToProcess.length,
                                     has_more: !!response.page_token,
                                     page_token: response.page_token || null,
                                 },
-                                items: response.items,
+                                items: itemsToProcess,
                             } as IDataObject,
                         });
                     } else {
                         // Comportamento padrão - cada item separado
-                        for (const item of response.items) {
+                        for (const item of itemsToProcess) {
                             returnData.push({ json: item as IDataObject });
                         }
                     }
