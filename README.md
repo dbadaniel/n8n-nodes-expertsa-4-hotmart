@@ -43,6 +43,13 @@ Não apenas o básico. Acesso completo a:
 - **Rate Limit Inteligente**: Retry automático com backoff exponencial (1s → 2s → 4s) quando a API da Hotmart retorna erro 429.
 - **Mensagens de Erro Melhoradas**: Orientações claras quando ocorrem erros de rate limit.
 
+### 5. 🎯 Progresso de Alunos com % de Conclusão (v1.1.2)
+Acompanhar o engajamento e a conclusão de cursos na Hotmart agora é simples e direto:
+- **Cálculo Automático**: Entrega `completed_percentage`, `completed_lessons`, `total_lessons` e `is_completed` já no primeiro nível do JSON.
+- **Dois Níveis de Detalhe**: Escolha entre o **Resumo Geral** (com a %) ou o **Histórico Detalhado** (lição por lição).
+- **Filtro Inteligente por E-mail ou ID**: Filtre diretamente por e-mail ou `user_id`. O node faz busca paginada automática em todas as páginas da área de membros para localizar o aluno de forma transparente.
+- **JSON Limpo**: Remove dados redundantes e poluídos da Hotmart, entregando apenas o que interessa.
+
 ---
 
 ## ⚙️ Modos de Autenticação
@@ -110,8 +117,12 @@ Abaixo a lista completa de operações suportadas:
 - **Cobrança**: Alterar data de vencimento da fatura.
 
 ### 🎓 Área de Membros (Club)
-- **Alunos**: Listar alunos, progresso e status.
-- **Conteúdo**: Listar módulos e páginas do curso.
+- **Progresso do Aluno (Novo)**:
+  - **Modo Resumo Geral**: Consulta a porcentagem (%) concluída, total de aulas, aulas assistidas e se finalizou (`is_completed`), com filtro opcional por `Email` ou `ID do Aluno (user_id)`.
+  - **Modo Aulas Detalhadas**: Histórico lição por lição com status de cada aula concluída pelo aluno (suporta filtro por e-mail com resolução automática de ID).
+- **Listar Alunos**: Listar alunos matriculados na área de membros com filtros por nome, status e módulos extras.
+- **Listar Módulos**: Obter os módulos cadastrados no Club.
+- **Listar Páginas**: Obter lições/páginas de um módulo informando o ID do produto e o ID do módulo.
 
 ### 📦 Produtos & Ofertas
 - **Produtos**: Listar todos os produtos da conta.
