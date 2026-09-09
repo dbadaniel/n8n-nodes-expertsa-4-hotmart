@@ -14,6 +14,10 @@ const FLOW_EVENT_MAP = {
     'PURCHASE_PROTEST': 9,
     'SUBSCRIPTION_CANCELLATION': 10,
     'SWITCH_PLAN': 11,
+    'CLUB_FIRST_ACCESS': 12,
+    'CLUB_MODULE_COMPLETED': 13,
+    'CLUB_COMPLETED_MODULE': 13,
+    'CLUB_COURSE_COMPLETED': 13,
 };
 const FLOW_OUTPUT_NAMES = [
     { type: 'main', displayName: 'Compra Aprovada' },
@@ -28,6 +32,8 @@ const FLOW_OUTPUT_NAMES = [
     { type: 'main', displayName: 'Disputa Aberta' },
     { type: 'main', displayName: 'Cancel. Assinatura' },
     { type: 'main', displayName: 'Troca de Plano' },
+    { type: 'main', displayName: 'Primeiro Acesso' },
+    { type: 'main', displayName: 'Curso Concluído' },
     { type: 'main', displayName: 'Outros' },
 ];
 const SUPER_FLOW_OUTPUT_NAMES = [
@@ -40,7 +46,7 @@ const SUPER_FLOW_OUTPUT_NAMES = [
 ];
 function getFlowOutputIndex(eventType) {
     var _a;
-    return (_a = FLOW_EVENT_MAP[eventType]) !== null && _a !== void 0 ? _a : 12;
+    return (_a = FLOW_EVENT_MAP[eventType]) !== null && _a !== void 0 ? _a : 14;
 }
 function getSuperFlowOutputIndex(eventType, bodyData) {
     const data = bodyData.data || {};
@@ -116,8 +122,14 @@ function parseWebhookData(bodyData) {
         if (data.user) {
             webhookData.user = data.user;
         }
+        if (data.student) {
+            webhookData.student = data.student;
+        }
         if (data.module) {
             webhookData.module = data.module;
+        }
+        if (data.course) {
+            webhookData.course = data.course;
         }
     }
     return webhookData;
@@ -139,11 +151,11 @@ class HotmartTrigger {
         this.description = {
             displayName: 'Hotmart Trigger',
             name: 'hotmartTrigger',
-            icon: 'file:hotmart.png',
+            icon: 'file:hotmart.svg',
             group: ['trigger'],
             version: 1,
-            subtitle: '={{$parameter["webhookMode"] === "flow" ? "Flow: " + "13 saídas" : $parameter["webhookMode"] === "superFlow" ? "Super Flow: 6 saídas" : $parameter["event"]}}',
-            description: 'Inicia o workflow quando um evento webhook da Hotmart ocorre',
+            subtitle: '={{$parameter["webhookMode"] === "flow" ? "Flow: " + "15 saídas" : $parameter["webhookMode"] === "superFlow" ? "Super Flow: 6 saídas" : $parameter["event"]}}',
+            description: 'Inicia o workflow quando um evento webhook da Hotmart ocorre.',
             defaults: {
                 name: 'Hotmart Trigger',
             },
@@ -163,6 +175,8 @@ class HotmartTrigger {
                     { type: 'main', displayName: $parameter["customizeOutputs"] ? $parameter["output_flow_dispute"] : "Disputa Aberta" },
                     { type: 'main', displayName: $parameter["customizeOutputs"] ? $parameter["output_flow_sub_cancel"] : "Cancel. Assinatura" },
                     { type: 'main', displayName: $parameter["customizeOutputs"] ? $parameter["output_flow_plan_switch"] : "Troca de Plano" },
+                    { type: 'main', displayName: $parameter["customizeOutputs"] ? $parameter["output_flow_first_access"] : "Primeiro Acesso" },
+                    { type: 'main', displayName: $parameter["customizeOutputs"] ? $parameter["output_flow_course_completed"] : "Curso Concluído" },
                     { type: 'main', displayName: $parameter["customizeOutputs"] ? $parameter["output_flow_other"] : "Outros" },
                 ]
                 : $parameter["webhookMode"] === "superFlow"
@@ -186,7 +200,7 @@ class HotmartTrigger {
             ],
             properties: [
                 {
-                    displayName: 'Modo do Webhook',
+                    displayName: 'Modo Do Webhook',
                     name: 'webhookMode',
                     type: 'options',
                     noDataExpression: true,
@@ -199,7 +213,7 @@ class HotmartTrigger {
                         {
                             name: 'Flow',
                             value: 'flow',
-                            description: 'Saídas separadas por tipo de evento (13 saídas)',
+                            description: 'Saídas separadas por tipo de evento (15 saídas)',
                         },
                         {
                             name: 'Super Flow',
@@ -222,14 +236,9 @@ class HotmartTrigger {
                     },
                     options: [
                         {
-                            name: 'Todos os Eventos',
-                            value: 'all',
-                            description: 'Disparar em qualquer evento webhook da Hotmart',
-                        },
-                        {
-                            name: 'Compra Aprovada',
-                            value: 'PURCHASE_APPROVED',
-                            description: 'Disparar quando uma compra é aprovada',
+                            name: 'Abandono De Carrinho',
+                            value: 'PURCHASE_OUT_OF_SHOPPING_CART',
+                            description: 'Disparar quando há abandono de carrinho',
                         },
                         {
                             name: 'Boleto Impresso',
@@ -237,9 +246,9 @@ class HotmartTrigger {
                             description: 'Disparar quando um boleto é impresso',
                         },
                         {
-                            name: 'Compra Cancelada',
-                            value: 'PURCHASE_CANCELED',
-                            description: 'Disparar quando uma compra é cancelada',
+                            name: 'Cancelamento De Assinatura',
+                            value: 'SUBSCRIPTION_CANCELLATION',
+                            description: 'Disparar quando uma assinatura é cancelada',
                         },
                         {
                             name: 'Chargeback',
@@ -247,9 +256,9 @@ class HotmartTrigger {
                             description: 'Disparar quando ocorre um chargeback',
                         },
                         {
-                            name: 'Compra Completa',
-                            value: 'PURCHASE_COMPLETE',
-                            description: 'Disparar quando uma compra é completada',
+                            name: 'Compra Aprovada',
+                            value: 'PURCHASE_APPROVED',
+                            description: 'Disparar quando uma compra é aprovada',
                         },
                         {
                             name: 'Compra Atrasada',
@@ -257,19 +266,19 @@ class HotmartTrigger {
                             description: 'Disparar quando uma compra está atrasada',
                         },
                         {
+                            name: 'Compra Cancelada',
+                            value: 'PURCHASE_CANCELED',
+                            description: 'Disparar quando uma compra é cancelada',
+                        },
+                        {
+                            name: 'Compra Completa',
+                            value: 'PURCHASE_COMPLETE',
+                            description: 'Disparar quando uma compra é completada',
+                        },
+                        {
                             name: 'Compra Expirada',
                             value: 'PURCHASE_EXPIRED',
                             description: 'Disparar quando uma compra expira',
-                        },
-                        {
-                            name: 'Abandono de Carrinho',
-                            value: 'PURCHASE_OUT_OF_SHOPPING_CART',
-                            description: 'Disparar quando há abandono de carrinho',
-                        },
-                        {
-                            name: 'Disputa Aberta',
-                            value: 'PURCHASE_PROTEST',
-                            description: 'Disparar quando uma disputa é aberta',
                         },
                         {
                             name: 'Compra Reembolsada',
@@ -277,19 +286,19 @@ class HotmartTrigger {
                             description: 'Disparar quando uma compra é reembolsada',
                         },
                         {
-                            name: 'Cancelamento de Assinatura',
-                            value: 'SUBSCRIPTION_CANCELLATION',
-                            description: 'Disparar quando uma assinatura é cancelada',
+                            name: 'Curso Concluído (Club)',
+                            value: 'CLUB_COURSE_COMPLETED',
+                            description: 'Disparar quando um aluno conclui o curso',
                         },
                         {
-                            name: 'Troca de Plano',
-                            value: 'SWITCH_PLAN',
-                            description: 'Disparar quando um plano de assinatura muda',
+                            name: 'Disputa Aberta',
+                            value: 'PURCHASE_PROTEST',
+                            description: 'Disparar quando uma disputa é aberta',
                         },
                         {
-                            name: 'Troca de Dia de Cobrança',
-                            value: 'UPDATE_SUBSCRIPTION_CHARGE_DATE',
-                            description: 'Disparar quando o dia de cobrança da assinatura é alterado',
+                            name: 'Módulo Completo (Club)',
+                            value: 'CLUB_MODULE_COMPLETED',
+                            description: 'Disparar quando um aluno completa um módulo do curso',
                         },
                         {
                             name: 'Primeiro Acesso (Club)',
@@ -297,9 +306,19 @@ class HotmartTrigger {
                             description: 'Disparar quando um aluno acessa o curso pela primeira vez',
                         },
                         {
-                            name: 'Módulo Completo (Club)',
-                            value: 'CLUB_MODULE_COMPLETED',
-                            description: 'Disparar quando um aluno completa um módulo do curso',
+                            name: 'Todos Os Eventos',
+                            value: 'all',
+                            description: 'Disparar em qualquer evento webhook da Hotmart',
+                        },
+                        {
+                            name: 'Troca De Dia De Cobrança',
+                            value: 'UPDATE_SUBSCRIPTION_CHARGE_DATE',
+                            description: 'Disparar quando o dia de cobrança da assinatura é alterado',
+                        },
+                        {
+                            name: 'Troca De Plano',
+                            value: 'SWITCH_PLAN',
+                            description: 'Disparar quando um plano de assinatura muda',
                         },
                     ],
                     default: 'all',
@@ -324,14 +343,14 @@ class HotmartTrigger {
                     description: 'O caminho da URL do webhook. Padrão é "webhook".',
                 },
                 {
-                    displayName: 'Personalizar Nomes das Saídas',
+                    displayName: 'Personalizar Nomes Das Saídas',
                     name: 'customizeOutputs',
                     type: 'boolean',
                     default: false,
-                    description: 'Ative para renomear as saídas dos modos Flow e Super Flow',
+                    description: 'Whether to rename the outputs for Flow and Super Flow modes',
                 },
                 {
-                    displayName: 'Nome alternativo para: Compra Única',
+                    displayName: 'Nome Alternativo Para: Compra Única',
                     name: 'output_super_single',
                     type: 'string',
                     default: 'Compra Única',
@@ -343,7 +362,7 @@ class HotmartTrigger {
                     },
                 },
                 {
-                    displayName: 'Nome alternativo para: Nova Assinatura',
+                    displayName: 'Nome Alternativo Para: Nova Assinatura',
                     name: 'output_super_new_sub',
                     type: 'string',
                     default: 'Nova Assinatura',
@@ -355,7 +374,7 @@ class HotmartTrigger {
                     },
                 },
                 {
-                    displayName: 'Nome alternativo para: Renovação',
+                    displayName: 'Nome Alternativo Para: Renovação',
                     name: 'output_super_renewal',
                     type: 'string',
                     default: 'Renovação',
@@ -367,7 +386,7 @@ class HotmartTrigger {
                     },
                 },
                 {
-                    displayName: 'Nome alternativo para: Cancelamento',
+                    displayName: 'Nome Alternativo Para: Cancelamento',
                     name: 'output_super_cancellation',
                     type: 'string',
                     default: 'Cancelamento',
@@ -379,7 +398,7 @@ class HotmartTrigger {
                     },
                 },
                 {
-                    displayName: 'Nome alternativo para: Problema Pagamento',
+                    displayName: 'Nome Alternativo Para: Problema Pagamento',
                     name: 'output_super_payment',
                     type: 'string',
                     default: 'Problema Pagamento',
@@ -391,7 +410,7 @@ class HotmartTrigger {
                     },
                 },
                 {
-                    displayName: 'Nome alternativo para: Outros',
+                    displayName: 'Nome Alternativo Para: Outros',
                     name: 'output_super_other',
                     type: 'string',
                     default: 'Outros',
@@ -403,7 +422,7 @@ class HotmartTrigger {
                     },
                 },
                 {
-                    displayName: 'Nome alternativo para: Compra Aprovada',
+                    displayName: 'Nome Alternativo Para: Compra Aprovada',
                     name: 'output_flow_approved',
                     type: 'string',
                     default: 'Compra Aprovada',
@@ -415,7 +434,7 @@ class HotmartTrigger {
                     },
                 },
                 {
-                    displayName: 'Nome alternativo para: Compra Completa',
+                    displayName: 'Nome Alternativo Para: Compra Completa',
                     name: 'output_flow_complete',
                     type: 'string',
                     default: 'Compra Completa',
@@ -427,7 +446,7 @@ class HotmartTrigger {
                     },
                 },
                 {
-                    displayName: 'Nome alternativo para: Compra Cancelada',
+                    displayName: 'Nome Alternativo Para: Compra Cancelada',
                     name: 'output_flow_canceled',
                     type: 'string',
                     default: 'Compra Cancelada',
@@ -439,7 +458,7 @@ class HotmartTrigger {
                     },
                 },
                 {
-                    displayName: 'Nome alternativo para: Compra Reembolsada',
+                    displayName: 'Nome Alternativo Para: Compra Reembolsada',
                     name: 'output_flow_refunded',
                     type: 'string',
                     default: 'Compra Reembolsada',
@@ -451,7 +470,7 @@ class HotmartTrigger {
                     },
                 },
                 {
-                    displayName: 'Nome alternativo para: Chargeback',
+                    displayName: 'Nome Alternativo Para: Chargeback',
                     name: 'output_flow_chargeback',
                     type: 'string',
                     default: 'Chargeback',
@@ -463,7 +482,7 @@ class HotmartTrigger {
                     },
                 },
                 {
-                    displayName: 'Nome alternativo para: Boleto Impresso',
+                    displayName: 'Nome Alternativo Para: Boleto Impresso',
                     name: 'output_flow_billet',
                     type: 'string',
                     default: 'Boleto Impresso',
@@ -475,7 +494,7 @@ class HotmartTrigger {
                     },
                 },
                 {
-                    displayName: 'Nome alternativo para: Compra Atrasada',
+                    displayName: 'Nome Alternativo Para: Compra Atrasada',
                     name: 'output_flow_delayed',
                     type: 'string',
                     default: 'Compra Atrasada',
@@ -487,7 +506,7 @@ class HotmartTrigger {
                     },
                 },
                 {
-                    displayName: 'Nome alternativo para: Compra Expirada',
+                    displayName: 'Nome Alternativo Para: Compra Expirada',
                     name: 'output_flow_expired',
                     type: 'string',
                     default: 'Compra Expirada',
@@ -499,7 +518,7 @@ class HotmartTrigger {
                     },
                 },
                 {
-                    displayName: 'Nome alternativo para: Abandono Carrinho',
+                    displayName: 'Nome Alternativo Para: Abandono Carrinho',
                     name: 'output_flow_abandoned',
                     type: 'string',
                     default: 'Abandono Carrinho',
@@ -511,7 +530,7 @@ class HotmartTrigger {
                     },
                 },
                 {
-                    displayName: 'Nome alternativo para: Disputa Aberta',
+                    displayName: 'Nome Alternativo Para: Disputa Aberta',
                     name: 'output_flow_dispute',
                     type: 'string',
                     default: 'Disputa Aberta',
@@ -523,7 +542,7 @@ class HotmartTrigger {
                     },
                 },
                 {
-                    displayName: 'Nome alternativo para: Cancel. Assinatura',
+                    displayName: 'Nome Alternativo Para: Cancel. Assinatura',
                     name: 'output_flow_sub_cancel',
                     type: 'string',
                     default: 'Cancel. Assinatura',
@@ -535,7 +554,7 @@ class HotmartTrigger {
                     },
                 },
                 {
-                    displayName: 'Nome alternativo para: Troca de Plano',
+                    displayName: 'Nome Alternativo Para: Troca De Plano',
                     name: 'output_flow_plan_switch',
                     type: 'string',
                     default: 'Troca de Plano',
@@ -547,7 +566,31 @@ class HotmartTrigger {
                     },
                 },
                 {
-                    displayName: 'Nome alternativo para: Outros',
+                    displayName: 'Nome Alternativo Para: Primeiro Acesso',
+                    name: 'output_flow_first_access',
+                    type: 'string',
+                    default: 'Primeiro Acesso',
+                    displayOptions: {
+                        show: {
+                            webhookMode: ['flow'],
+                            customizeOutputs: [true],
+                        },
+                    },
+                },
+                {
+                    displayName: 'Nome Alternativo Para: Curso Concluído',
+                    name: 'output_flow_course_completed',
+                    type: 'string',
+                    default: 'Curso Concluído',
+                    displayOptions: {
+                        show: {
+                            webhookMode: ['flow'],
+                            customizeOutputs: [true],
+                        },
+                    },
+                },
+                {
+                    displayName: 'Nome Alternativo Para: Outros',
                     name: 'output_flow_other',
                     type: 'string',
                     default: 'Outros',
@@ -580,7 +623,10 @@ class HotmartTrigger {
         const webhookData = parseWebhookData(bodyData);
         if (webhookMode === 'standard') {
             const event = this.getNodeParameter('event');
-            if (event !== 'all' && eventType !== event) {
+            const isMatch = event === 'all' || eventType === event ||
+                (event === 'CLUB_COURSE_COMPLETED' && ['CLUB_COURSE_COMPLETED', 'CLUB_MODULE_COMPLETED', 'CLUB_COMPLETED_MODULE'].includes(eventType)) ||
+                (event === 'CLUB_MODULE_COMPLETED' && ['CLUB_COURSE_COMPLETED', 'CLUB_MODULE_COMPLETED', 'CLUB_COMPLETED_MODULE'].includes(eventType));
+            if (!isMatch) {
                 return {
                     webhookResponse: {
                         status: 200,

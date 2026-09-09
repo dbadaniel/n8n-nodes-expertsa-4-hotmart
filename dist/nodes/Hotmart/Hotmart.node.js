@@ -9,11 +9,12 @@ class Hotmart {
         this.description = {
             displayName: 'Hotmart',
             name: 'hotmart',
-            icon: 'file:hotmart.png',
+            icon: 'file:hotmart.svg',
             group: ['transform'],
             version: 1,
             subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-            description: 'Integração com a API da Hotmart com suporte a credenciais estáticas e tokens dinâmicos (modo SaaS)',
+            description: 'Integração com a API da Hotmart com suporte a credenciais estáticas e tokens dinâmicos (modo SaaS).',
+            usableAsTool: true,
             defaults: {
                 name: 'Hotmart',
             },
@@ -32,7 +33,7 @@ class Hotmart {
             ],
             properties: [
                 {
-                    displayName: 'Modo de Autenticação',
+                    displayName: 'Modo De Autenticação',
                     name: 'authMode',
                     type: 'options',
                     options: [
@@ -51,7 +52,7 @@ class Hotmart {
                     description: 'Escolha como autenticar com a API da Hotmart',
                 },
                 {
-                    displayName: 'Token de Acesso',
+                    displayName: 'Token De Acesso',
                     name: 'accessToken',
                     type: 'string',
                     typeOptions: {
@@ -90,11 +91,11 @@ class Hotmart {
                     description: 'O ambiente da Hotmart. IMPORTANTE: Credenciais de Produção só funcionam em Produção e vice-versa.',
                 },
                 {
-                    displayName: 'Incluir Metadados de Paginação',
+                    displayName: 'Incluir Metadados De Paginação',
                     name: 'includePaginationMetadata',
                     type: 'boolean',
                     default: false,
-                    description: 'Retorna metadados úteis para AI Agents junto com os resultados (items_returned, has_more, page_token)',
+                    description: 'Whether to return useful pagination metadata for AI Agents along with results (items_returned, has_more, page_token)',
                     displayOptions: {
                         show: {
                             resource: ['sales', 'subscriptions', 'products', 'members', 'events', 'coupons'],
@@ -108,11 +109,7 @@ class Hotmart {
                     noDataExpression: true,
                     options: [
                         {
-                            name: 'Autenticação',
-                            value: 'auth',
-                        },
-                        {
-                            name: 'Área de Membros',
+                            name: 'Área De Membro',
                             value: 'members',
                         },
                         {
@@ -120,11 +117,19 @@ class Hotmart {
                             value: 'subscriptions',
                         },
                         {
+                            name: 'Autenticação',
+                            value: 'auth',
+                        },
+                        {
                             name: 'Cupom',
                             value: 'coupons',
                         },
                         {
-                            name: 'Negociação de Parcelas',
+                            name: 'Evento',
+                            value: 'events',
+                        },
+                        {
+                            name: 'Negociação De Parcela',
                             value: 'installments',
                         },
                         {
@@ -134,10 +139,6 @@ class Hotmart {
                         {
                             name: 'Venda',
                             value: 'sales',
-                        },
-                        {
-                            name: 'Evento',
-                            value: 'events',
                         },
                     ],
                     default: 'sales',
@@ -192,14 +193,18 @@ class Hotmart {
                                 expires_at: expiresAt,
                                 environment,
                             },
+                            pairedItem: { item: i },
                         });
                     }
                     catch (error) {
                         if (this.continueOnFail()) {
-                            returnData.push({ json: { error: error.message } });
+                            returnData.push({
+                                json: { error: error.message },
+                                pairedItem: { item: i },
+                            });
                             continue;
                         }
-                        throw error;
+                        throw new n8n_workflow_1.NodeApiError(this.getNode(), error);
                     }
                 }
             }
@@ -221,7 +226,7 @@ class Hotmart {
             accessToken = this.getNodeParameter('accessToken', 0, '');
             const environment = this.getNodeParameter('environment', 0, 'production');
             if (!accessToken) {
-                throw new Error('Token de Acesso é obrigatório no modo SaaS. Use a operação "Autenticação > Obter Access Token" primeiro.');
+                throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Token de Acesso é obrigatório no modo SaaS. Use a operação "Autenticação > Obter Access Token" primeiro.');
             }
             baseUrl = (0, GenericFunctions_1.getBaseUrl)(environment);
         }
@@ -602,23 +607,33 @@ class Hotmart {
                                 },
                                 items: itemsToProcess,
                             },
+                            pairedItem: { item: i },
                         });
                     }
                     else {
                         for (const item of itemsToProcess) {
-                            returnData.push({ json: item });
+                            returnData.push({
+                                json: item,
+                                pairedItem: { item: i },
+                            });
                         }
                     }
                 }
                 else {
-                    returnData.push({ json: response });
+                    returnData.push({
+                        json: response,
+                        pairedItem: { item: i },
+                    });
                 }
             }
             catch (error) {
                 const err = error;
                 const errorMessage = ((_c = (_b = err.response) === null || _b === void 0 ? void 0 : _b.data) === null || _c === void 0 ? void 0 : _c.message) || err.message || 'Erro desconhecido na requisição';
                 if (this.continueOnFail()) {
-                    returnData.push({ json: { error: errorMessage } });
+                    returnData.push({
+                        json: { error: errorMessage },
+                        pairedItem: { item: i },
+                    });
                     continue;
                 }
                 throw new n8n_workflow_1.NodeApiError(this.getNode(), { message: errorMessage });

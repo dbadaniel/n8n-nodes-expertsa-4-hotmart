@@ -13,7 +13,7 @@ export const productsOperations: INodeProperties[] = [
         },
         options: [
             {
-                name: 'Listar Produtos',
+                name: 'Get Many',
                 value: 'getAll',
                 description: 'Obter todos os produtos',
                 action: 'Listar todos os produtos',
@@ -35,7 +35,7 @@ export const productsOperations: INodeProperties[] = [
                 },
             },
             {
-                name: 'Listar Ofertas do Produto',
+                name: 'Listar Ofertas Do Produto',
                 value: 'getOffers',
                 description: 'Obter ofertas de um produto',
                 action: 'Listar ofertas do produto',
@@ -57,7 +57,7 @@ export const productsOperations: INodeProperties[] = [
                 },
             },
             {
-                name: 'Listar Planos do Produto',
+                name: 'Listar Planos Do Produto',
                 value: 'getPlans',
                 description: 'Obter planos de assinatura de um produto',
                 action: 'Listar planos do produto',
@@ -85,7 +85,7 @@ export const productsOperations: INodeProperties[] = [
 
 export const productsFields: INodeProperties[] = [
     {
-        displayName: 'UUID do Produto',
+        displayName: 'UUID Do Produto',
         name: 'productUcode',
         type: 'string',
         required: true,
@@ -110,7 +110,7 @@ export const productsFields: INodeProperties[] = [
             },
         },
         default: false,
-        description: 'Se deve retornar todos os resultados ou apenas até um limite',
+        description: 'Whether to return all results or only up to a given limit',
     },
     {
         displayName: 'Limite',
@@ -125,10 +125,10 @@ export const productsFields: INodeProperties[] = [
         },
         typeOptions: {
             minValue: 1,
-            maxValue: 500,
+
         },
         default: 50,
-        description: 'Número máximo de resultados para retornar',
+        description: 'Max number of results to return',
         routing: {
             send: {
                 type: 'query',
@@ -150,7 +150,37 @@ export const productsFields: INodeProperties[] = [
         },
         options: [
             {
-                displayName: 'ID do Produto',
+                displayName: 'Formato',
+                name: 'format',
+                type: 'options',
+                options: [
+                    { name: 'Agente', value: 'AGENT' },
+                    { name: 'Áudios', value: 'AUDIOS' },
+                    { name: 'Bundle', value: 'BUNDLE' },
+                    { name: 'Códigos Seriais', value: 'SERIAL_CODES' },
+                    { name: 'Comunidade', value: 'COMMUNITY' },
+                    { name: 'Curso Online', value: 'ONLINE_COURSE' },
+                    { name: 'E-Book', value: 'EBOOK' },
+                    { name: 'E-Ticket', value: 'ETICKET' },
+                    { name: 'Evento Online', value: 'ONLINE_EVENT' },
+                    { name: 'Imagens', value: 'IMAGES' },
+                    { name: 'Mobile Apps', value: 'MOBILE_APPS' },
+                    { name: 'Serviço Online', value: 'ONLINE_SERVICE' },
+                    { name: 'Software', value: 'SOFTWARE' },
+                    { name: 'Templates', value: 'TEMPLATES' },
+                    { name: 'Vídeos', value: 'VIDEOS' },
+                ],
+                default: 'ONLINE_COURSE',
+                description: 'Filtrar por formato do produto',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'format',
+                    },
+                },
+            },
+            {
+                displayName: 'ID Do Produto',
                 name: 'id',
                 type: 'number',
                 default: 0,
@@ -167,13 +197,13 @@ export const productsFields: INodeProperties[] = [
                 name: 'status',
                 type: 'options',
                 options: [
-                    { name: 'Rascunho', value: 'DRAFT' },
-                    { name: 'Ativo', value: 'ACTIVE' },
-                    { name: 'Pausado', value: 'PAUSED' },
-                    { name: 'Não Aprovado', value: 'NOT_APPROVED' },
-                    { name: 'Em Revisão', value: 'IN_REVIEW' },
-                    { name: 'Deletado', value: 'DELETED' },
                     { name: 'Alterações Pendentes', value: 'CHANGES_PENDING_ON_PRODUCT' },
+                    { name: 'Ativo', value: 'ACTIVE' },
+                    { name: 'Deletado', value: 'DELETED' },
+                    { name: 'Em Revisão', value: 'IN_REVIEW' },
+                    { name: 'Não Aprovado', value: 'NOT_APPROVED' },
+                    { name: 'Pausado', value: 'PAUSED' },
+                    { name: 'Rascunho', value: 'DRAFT' },
                 ],
                 default: 'ACTIVE',
                 description: 'Filtrar por status do produto',
@@ -181,36 +211,6 @@ export const productsFields: INodeProperties[] = [
                     send: {
                         type: 'query',
                         property: 'status',
-                    },
-                },
-            },
-            {
-                displayName: 'Formato',
-                name: 'format',
-                type: 'options',
-                options: [
-                    { name: 'Agente', value: 'AGENT' },
-                    { name: 'Áudios', value: 'AUDIOS' },
-                    { name: 'Bundle', value: 'BUNDLE' },
-                    { name: 'Códigos Seriais', value: 'SERIAL_CODES' },
-                    { name: 'Comunidade', value: 'COMMUNITY' },
-                    { name: 'Curso Online', value: 'ONLINE_COURSE' },
-                    { name: 'E-book', value: 'EBOOK' },
-                    { name: 'E-ticket', value: 'ETICKET' },
-                    { name: 'Evento Online', value: 'ONLINE_EVENT' },
-                    { name: 'Imagens', value: 'IMAGES' },
-                    { name: 'Mobile Apps', value: 'MOBILE_APPS' },
-                    { name: 'Serviço Online', value: 'ONLINE_SERVICE' },
-                    { name: 'Software', value: 'SOFTWARE' },
-                    { name: 'Templates', value: 'TEMPLATES' },
-                    { name: 'Vídeos', value: 'VIDEOS' },
-                ],
-                default: 'ONLINE_COURSE',
-                description: 'Filtrar por formato do produto',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'format',
                     },
                 },
             },

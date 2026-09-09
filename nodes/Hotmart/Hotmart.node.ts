@@ -7,7 +7,7 @@ import type {
     IDataObject,
     JsonObject,
 } from 'n8n-workflow';
-import { NodeApiError } from 'n8n-workflow';
+import { NodeApiError, NodeOperationError } from 'n8n-workflow';
 
 import {
     salesOperations,
@@ -37,11 +37,12 @@ export class Hotmart implements INodeType {
     description: INodeTypeDescription = {
         displayName: 'Hotmart',
         name: 'hotmart',
-        icon: 'file:hotmart.png',
+        icon: 'file:hotmart.svg',
         group: ['transform'],
         version: 1,
         subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-        description: 'Integração com a API da Hotmart com suporte a credenciais estáticas e tokens dinâmicos (modo SaaS)',
+        description: 'Integração com a API da Hotmart com suporte a credenciais estáticas e tokens dinâmicos (modo SaaS).',
+        usableAsTool: true,
         defaults: {
             name: 'Hotmart',
         },
@@ -61,7 +62,7 @@ export class Hotmart implements INodeType {
         properties: [
             // Seletor de modo de autenticação
             {
-                displayName: 'Modo de Autenticação',
+                displayName: 'Modo De Autenticação',
                 name: 'authMode',
                 type: 'options',
                 options: [
@@ -81,7 +82,7 @@ export class Hotmart implements INodeType {
             },
             // Campos de token dinâmico (exibidos apenas no modo SaaS)
             {
-                displayName: 'Token de Acesso',
+                displayName: 'Token De Acesso',
                 name: 'accessToken',
                 type: 'string',
                 typeOptions: {
@@ -121,11 +122,11 @@ export class Hotmart implements INodeType {
             },
             // Opção de metadados de paginação para AI Agents
             {
-                displayName: 'Incluir Metadados de Paginação',
+                displayName: 'Incluir Metadados De Paginação',
                 name: 'includePaginationMetadata',
                 type: 'boolean',
                 default: false,
-                description: 'Retorna metadados úteis para AI Agents junto com os resultados (items_returned, has_more, page_token)',
+                description: 'Whether to return useful pagination metadata for AI Agents along with results (items_returned, has_more, page_token)',
                 displayOptions: {
                     show: {
                         resource: ['sales', 'subscriptions', 'products', 'members', 'events', 'coupons'],
@@ -140,11 +141,7 @@ export class Hotmart implements INodeType {
                 noDataExpression: true,
                 options: [
                     {
-                        name: 'Autenticação',
-                        value: 'auth',
-                    },
-                    {
-                        name: 'Área de Membros',
+                        name: 'Área De Membro',
                         value: 'members',
                     },
                     {
@@ -152,11 +149,19 @@ export class Hotmart implements INodeType {
                         value: 'subscriptions',
                     },
                     {
+                        name: 'Autenticação',
+                        value: 'auth',
+                    },
+                    {
                         name: 'Cupom',
                         value: 'coupons',
                     },
                     {
-                        name: 'Negociação de Parcelas',
+                        name: 'Evento',
+                        value: 'events',
+                    },
+                    {
+                        name: 'Negociação De Parcela',
                         value: 'installments',
                     },
                     {
@@ -166,10 +171,6 @@ export class Hotmart implements INodeType {
                     {
                         name: 'Venda',
                         value: 'sales',
-                    },
-                    {
-                        name: 'Evento',
-                        value: 'events',
                     },
                 ],
                 default: 'sales',
@@ -231,13 +232,17 @@ export class Hotmart implements INodeType {
                                 expires_at: expiresAt,
                                 environment,
                             },
+                            pairedItem: { item: i },
                         });
                     } catch (error) {
                         if (this.continueOnFail()) {
-                            returnData.push({ json: { error: (error as Error).message } });
+                            returnData.push({
+                                json: { error: (error as Error).message },
+                                pairedItem: { item: i },
+                            });
                             continue;
                         }
-                        throw error;
+                        throw new NodeApiError(this.getNode(), error as JsonObject);
                     }
                 }
             }
@@ -264,7 +269,7 @@ export class Hotmart implements INodeType {
             const environment = this.getNodeParameter('environment', 0, 'production') as string;
 
             if (!accessToken) {
-                throw new Error('Token de Acesso é obrigatório no modo SaaS. Use a operação "Autenticação > Obter Access Token" primeiro.');
+                throw new NodeOperationError(this.getNode(), 'Token de Acesso é obrigatório no modo SaaS. Use a operação "Autenticação > Obter Access Token" primeiro.');
             }
 
             baseUrl = getBaseUrl(environment);
@@ -690,16 +695,23 @@ export class Hotmart implements INodeType {
                                 },
                                 items: itemsToProcess,
                             } as IDataObject,
+                            pairedItem: { item: i },
                         });
                     } else {
                         // Comportamento padrão - cada item separado
                         for (const item of itemsToProcess) {
-                            returnData.push({ json: item as IDataObject });
+                            returnData.push({
+                                json: item as IDataObject,
+                                pairedItem: { item: i },
+                            });
                         }
                     }
                 } else {
                     // Retornar resposta completa
-                    returnData.push({ json: response as IDataObject });
+                    returnData.push({
+                        json: response as IDataObject,
+                        pairedItem: { item: i },
+                    });
                 }
             } catch (error) {
                 // Extrair mensagem de erro de forma segura para evitar referências circulares
@@ -707,7 +719,10 @@ export class Hotmart implements INodeType {
                 const errorMessage = err.response?.data?.message || err.message || 'Erro desconhecido na requisição';
 
                 if (this.continueOnFail()) {
-                    returnData.push({ json: { error: errorMessage } });
+                    returnData.push({
+                        json: { error: errorMessage },
+                        pairedItem: { item: i },
+                    });
                     continue;
                 }
 

@@ -13,10 +13,10 @@ export const eventsOperations: INodeProperties[] = [
         },
         options: [
             {
-                name: 'Informações do Evento',
+                name: 'Informações Do Evento',
                 value: 'getInfo',
                 description: 'Obter informações de um evento',
-                action: 'Obter informações do evento',
+                action: 'Obter informa es do evento',
                 routing: {
                     request: {
                         method: 'GET',
@@ -53,7 +53,7 @@ export const eventsOperations: INodeProperties[] = [
 
 export const eventsFields: INodeProperties[] = [
     {
-        displayName: 'ID do Evento',
+        displayName: 'ID Do Evento',
         name: 'eventId',
         type: 'number',
         required: true,
@@ -76,7 +76,7 @@ export const eventsFields: INodeProperties[] = [
             },
         },
         default: false,
-        description: 'Se deve retornar todos os resultados ou apenas até um limite',
+        description: 'Whether to return all results or only up to a given limit',
     },
     {
         displayName: 'Limite',
@@ -91,10 +91,10 @@ export const eventsFields: INodeProperties[] = [
         },
         typeOptions: {
             minValue: 1,
-            maxValue: 500,
+
         },
         default: 50,
-        description: 'Número máximo de resultados para retornar',
+        description: 'Max number of results to return',
         routing: {
             send: {
                 type: 'query',
@@ -129,7 +129,7 @@ export const eventsFields: INodeProperties[] = [
                 },
             },
             {
-                displayName: 'Email do Participante',
+                displayName: 'Email Do Participante',
                 name: 'participant_email',
                 type: 'string',
                 default: '',
@@ -138,6 +138,105 @@ export const eventsFields: INodeProperties[] = [
                     send: {
                         type: 'query',
                         property: 'participant_email',
+                    },
+                },
+            },
+            {
+                displayName: 'ID Do Ingresso',
+                name: 'id_eticket',
+                type: 'number',
+                default: 0,
+                description: 'ID sequencial do ingresso',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'id_eticket',
+                    },
+                },
+            },
+            {
+                displayName: 'ID Do Lote',
+                name: 'id_lot',
+                type: 'number',
+                default: 0,
+                description: 'ID do lote/categoria do ingresso',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'id_lot',
+                    },
+                },
+            },
+            {
+                displayName: 'QR Code Do Ingresso',
+                name: 'ticket_qr_code',
+                type: 'string',
+                default: '',
+                description: 'Código único do ingresso (QR Code)',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'ticket_qr_code',
+                    },
+                },
+            },
+            {
+                displayName: 'Status Do Check-In',
+                name: 'checkin_status',
+                type: 'options',
+                options: [
+                    { name: 'Concluído', value: 'CONCLUDED' },
+                    { name: 'Parcial', value: 'PARTIAL' },
+                    { name: 'Pendente', value: 'PENDING' },
+                    { name: 'Todos', value: 'ALL' },
+                ],
+                default: 'ALL',
+                description: 'Filtrar por status de preenchimento dos dados',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'checkin_status',
+                    },
+                },
+            },
+            {
+                displayName: 'Status Do Ingresso',
+                name: 'ticket_status',
+                type: 'options',
+                options: [
+                    { name: 'Chargeback', value: 'CHARGEBACK' },
+                    { name: 'Convite', value: 'INVITE' },
+                    { name: 'Convite Cancelado', value: 'INVITE_CANCELED' },
+                    { name: 'Disponível', value: 'AVAILABLE' },
+                    { name: 'Excluído', value: 'EXCLUDED' },
+                    { name: 'Reembolsado', value: 'REFUNDED' },
+                    { name: 'Reservado', value: 'RESERVED' },
+                    { name: 'Vendido', value: 'SOLD' },
+                ],
+                default: 'SOLD',
+                description: 'Filtrar por status do ingresso',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'ticket_status',
+                    },
+                },
+            },
+            {
+                displayName: 'Tipo Do Ingresso',
+                name: 'ticket_type',
+                type: 'options',
+                options: [
+                    { name: 'Gratuito', value: 'FREE' },
+                    { name: 'Pago', value: 'PAID' },
+                    { name: 'Todos', value: 'ALL' },
+                ],
+                default: 'ALL',
+                description: 'Filtrar por tipo do ingresso',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'ticket_type',
                     },
                 },
             },
@@ -151,105 +250,6 @@ export const eventsFields: INodeProperties[] = [
                     send: {
                         type: 'query',
                         property: 'last_update',
-                    },
-                },
-            },
-            {
-                displayName: 'ID do Lote',
-                name: 'id_lot',
-                type: 'number',
-                default: 0,
-                description: 'ID do lote/categoria do ingresso',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'id_lot',
-                    },
-                },
-            },
-            {
-                displayName: 'Status do Ingresso',
-                name: 'ticket_status',
-                type: 'options',
-                options: [
-                    { name: 'Vendido', value: 'SOLD' },
-                    { name: 'Convite', value: 'INVITE' },
-                    { name: 'Convite Cancelado', value: 'INVITE_CANCELED' },
-                    { name: 'Reembolsado', value: 'REFUNDED' },
-                    { name: 'Chargeback', value: 'CHARGEBACK' },
-                    { name: 'Excluído', value: 'EXCLUDED' },
-                    { name: 'Disponível', value: 'AVAILABLE' },
-                    { name: 'Reservado', value: 'RESERVED' },
-                ],
-                default: 'SOLD',
-                description: 'Filtrar por status do ingresso',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'ticket_status',
-                    },
-                },
-            },
-            {
-                displayName: 'Tipo do Ingresso',
-                name: 'ticket_type',
-                type: 'options',
-                options: [
-                    { name: 'Pago', value: 'PAID' },
-                    { name: 'Gratuito', value: 'FREE' },
-                    { name: 'Todos', value: 'ALL' },
-                ],
-                default: 'ALL',
-                description: 'Filtrar por tipo do ingresso',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'ticket_type',
-                    },
-                },
-            },
-            {
-                displayName: 'Status do Check-in',
-                name: 'checkin_status',
-                type: 'options',
-                options: [
-                    { name: 'Pendente', value: 'PENDING' },
-                    { name: 'Parcial', value: 'PARTIAL' },
-                    { name: 'Concluído', value: 'CONCLUDED' },
-                    { name: 'Todos', value: 'ALL' },
-                ],
-                default: 'ALL',
-                description: 'Filtrar por status de preenchimento dos dados',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'checkin_status',
-                    },
-                },
-            },
-            {
-                displayName: 'ID do Ingresso',
-                name: 'id_eticket',
-                type: 'number',
-                default: 0,
-                description: 'ID sequencial do ingresso',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'id_eticket',
-                    },
-                },
-            },
-            {
-                displayName: 'QR Code do Ingresso',
-                name: 'ticket_qr_code',
-                type: 'string',
-                default: '',
-                description: 'Código único do ingresso (QR Code)',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'ticket_qr_code',
                     },
                 },
             },

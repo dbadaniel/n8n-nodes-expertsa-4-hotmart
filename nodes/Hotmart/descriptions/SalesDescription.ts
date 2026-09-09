@@ -13,66 +13,10 @@ export const salesOperations: INodeProperties[] = [
         },
         options: [
             {
-                name: 'Listar Vendas',
-                value: 'getAll',
-                description: 'Obter histórico de vendas',
-                action: 'Listar histórico de vendas',
-                routing: {
-                    request: {
-                        method: 'GET',
-                        url: '/payments/api/v1/sales/history',
-                    },
-                    output: {
-                        postReceive: [
-                            {
-                                type: 'rootProperty',
-                                properties: {
-                                    property: 'items',
-                                },
-                            },
-                        ],
-                    },
-                },
-            },
-            {
-                name: 'Resumo de Vendas',
-                value: 'getSummary',
-                description: 'Obter resumo de vendas',
-                action: 'Obter resumo de vendas',
-                routing: {
-                    request: {
-                        method: 'GET',
-                        url: '/payments/api/v1/sales/summary',
-                    },
-                },
-            },
-            {
-                name: 'Listar Comissões',
-                value: 'getCommissions',
-                description: 'Obter comissões de vendas',
-                action: 'Listar comissões de vendas',
-                routing: {
-                    request: {
-                        method: 'GET',
-                        url: '/payments/api/v1/sales/commissions',
-                    },
-                    output: {
-                        postReceive: [
-                            {
-                                type: 'rootProperty',
-                                properties: {
-                                    property: 'items',
-                                },
-                            },
-                        ],
-                    },
-                },
-            },
-            {
-                name: 'Detalhes de Preço',
+                name: 'Detalhes De Preço',
                 value: 'getPriceDetails',
                 description: 'Obter detalhes de preço de uma venda',
-                action: 'Obter detalhes de preço',
+                action: 'Obter detalhes de pre o',
                 routing: {
                     request: {
                         method: 'GET',
@@ -91,7 +35,51 @@ export const salesOperations: INodeProperties[] = [
                 },
             },
             {
-                name: 'Participantes de Vendas',
+                name: 'Get Many',
+                value: 'getAll',
+                description: 'Obter histórico de vendas',
+                action: 'Listar hist rico de vendas',
+                routing: {
+                    request: {
+                        method: 'GET',
+                        url: '/payments/api/v1/sales/history',
+                    },
+                    output: {
+                        postReceive: [
+                            {
+                                type: 'rootProperty',
+                                properties: {
+                                    property: 'items',
+                                },
+                            },
+                        ],
+                    },
+                },
+            },
+            {
+                name: 'Listar Comissões',
+                value: 'getCommissions',
+                description: 'Obter comissões de vendas',
+                action: 'Listar comiss es de vendas',
+                routing: {
+                    request: {
+                        method: 'GET',
+                        url: '/payments/api/v1/sales/commissions',
+                    },
+                    output: {
+                        postReceive: [
+                            {
+                                type: 'rootProperty',
+                                properties: {
+                                    property: 'items',
+                                },
+                            },
+                        ],
+                    },
+                },
+            },
+            {
+                name: 'Participantes De Vendas',
                 value: 'getUsers',
                 description: 'Obter informações dos participantes das vendas',
                 action: 'Listar participantes de vendas',
@@ -124,6 +112,18 @@ export const salesOperations: INodeProperties[] = [
                     },
                 },
             },
+            {
+                name: 'Resumo De Vendas',
+                value: 'getSummary',
+                description: 'Obter resumo de vendas',
+                action: 'Obter resumo de vendas',
+                routing: {
+                    request: {
+                        method: 'GET',
+                        url: '/payments/api/v1/sales/summary',
+                    },
+                },
+            },
         ],
         default: 'getAll',
     },
@@ -131,7 +131,7 @@ export const salesOperations: INodeProperties[] = [
 
 export const salesFields: INodeProperties[] = [
     {
-        displayName: 'Código da Transação',
+        displayName: 'Código Da Transação',
         name: 'transactionCode',
         type: 'string',
         required: true,
@@ -156,7 +156,7 @@ export const salesFields: INodeProperties[] = [
             },
         },
         default: false,
-        description: 'Se deve retornar todos os resultados ou apenas até um limite',
+        description: 'Whether to return all results or only up to a given limit',
     },
     {
         displayName: 'Limite',
@@ -171,10 +171,10 @@ export const salesFields: INodeProperties[] = [
         },
         typeOptions: {
             minValue: 1,
-            maxValue: 500,
+
         },
         default: 50,
-        description: 'Número máximo de resultados para retornar',
+        description: 'Max number of results to return',
         routing: {
             send: {
                 type: 'query',
@@ -196,55 +196,46 @@ export const salesFields: INodeProperties[] = [
         },
         options: [
             {
-                displayName: 'ID do Produto',
-                name: 'product_id',
-                type: 'number',
-                default: 0,
-                description: 'Filtrar por ID do produto',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'product_id',
-                    },
-                },
-            },
-            {
-                displayName: 'Email do Comprador',
-                name: 'buyer_email',
+                displayName: 'Código Da Oferta',
+                name: 'offer_code',
                 type: 'string',
                 default: '',
-                description: 'Filtrar por email do comprador',
+                description: 'Filtrar por código de oferta do produto',
                 routing: {
                     send: {
                         type: 'query',
-                        property: 'buyer_email',
+                        property: 'offer_code',
                     },
                 },
             },
             {
-                displayName: 'Nome do Comprador',
-                name: 'buyer_name',
+                displayName: 'Código Da Transação',
+                name: 'transaction',
                 type: 'string',
                 default: '',
-                description: 'Filtrar por nome da pessoa compradora',
+                description: 'Filtrar por código da transação',
                 routing: {
                     send: {
                         type: 'query',
-                        property: 'buyer_name',
+                        property: 'transaction',
                     },
                 },
             },
             {
-                displayName: 'Data Inicial',
-                name: 'start_date',
-                type: 'dateTime',
-                default: '',
-                description: 'Filtrar vendas a partir desta data',
+                displayName: 'Comissionado Como',
+                name: 'commission_as',
+                type: 'options',
+                options: [
+                    { name: 'Afiliado', value: 'AFFILIATE' },
+                    { name: 'Coprodutor', value: 'COPRODUCER' },
+                    { name: 'Produtor', value: 'PRODUCER' },
+                ],
+                default: 'PRODUCER',
+                description: 'Como o usuário foi comissionado pela venda',
                 routing: {
                     send: {
                         type: 'query',
-                        property: 'start_date',
-                        value: '={{new Date($value).getTime()}}',
+                        property: 'commission_as',
                     },
                 },
             },
@@ -263,47 +254,68 @@ export const salesFields: INodeProperties[] = [
                 },
             },
             {
-                displayName: 'Status da Transação',
-                name: 'transaction_status',
-                type: 'options',
-                options: [
-                    { name: 'Aprovada', value: 'APPROVED' },
-                    { name: 'Bloqueada', value: 'BLOCKED' },
-                    { name: 'Cancelada', value: 'CANCELLED' },
-                    { name: 'Chargeback', value: 'CHARGEBACK' },
-                    { name: 'Completa', value: 'COMPLETE' },
-                    { name: 'Expirada', value: 'EXPIRED' },
-                    { name: 'Sem Fundos', value: 'NO_FUNDS' },
-                    { name: 'Vencida', value: 'OVERDUE' },
-                    { name: 'Parcialmente Reembolsada', value: 'PARTIALLY_REFUNDED' },
-                    { name: 'Pré-venda', value: 'PRE_ORDER' },
-                    { name: 'Boleto Impresso', value: 'PRINTED_BILLET' },
-                    { name: 'Processando', value: 'PROCESSING_TRANSACTION' },
-                    { name: 'Em Disputa', value: 'PROTESTED' },
-                    { name: 'Reembolsada', value: 'REFUNDED' },
-                    { name: 'Iniciada', value: 'STARTED' },
-                    { name: 'Em Análise', value: 'UNDER_ANALISYS' },
-                    { name: 'Aguardando Pagamento', value: 'WAITING_PAYMENT' },
-                ],
-                default: 'APPROVED',
-                description: 'Filtrar por status da transação',
+                displayName: 'Data Inicial',
+                name: 'start_date',
+                type: 'dateTime',
+                default: '',
+                description: 'Filtrar vendas a partir desta data',
                 routing: {
                     send: {
                         type: 'query',
-                        property: 'transaction_status',
+                        property: 'start_date',
+                        value: '={{new Date($value).getTime()}}',
                     },
                 },
             },
             {
-                displayName: 'Código da Transação',
-                name: 'transaction',
+                displayName: 'Email do Comprador',
+                name: 'buyer_email',
                 type: 'string',
                 default: '',
-                description: 'Filtrar por código da transação',
+                description: 'Filtrar por email do comprador',
                 routing: {
                     send: {
                         type: 'query',
-                        property: 'transaction',
+                        property: 'buyer_email',
+                    },
+                },
+            },
+            {
+                displayName: 'ID Do Produto',
+                name: 'product_id',
+                type: 'number',
+                default: 0,
+                description: 'Filtrar por ID do produto',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'product_id',
+                    },
+                },
+            },
+            {
+                displayName: 'Nome Do Afiliado',
+                name: 'affiliate_name',
+                type: 'string',
+                default: '',
+                description: 'Nome da pessoa Afiliada responsável pela venda',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'affiliate_name',
+                    },
+                },
+            },
+            {
+                displayName: 'Nome do Comprador',
+                name: 'buyer_name',
+                type: 'string',
+                default: '',
+                description: 'Filtrar por nome da pessoa compradora',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'buyer_name',
                     },
                 },
             },
@@ -322,25 +334,44 @@ export const salesFields: INodeProperties[] = [
                 },
             },
             {
-                displayName: 'Nome do Afiliado',
-                name: 'affiliate_name',
-                type: 'string',
-                default: '',
-                description: 'Nome da pessoa Afiliada responsável pela venda',
+                displayName: 'Status Da Transação',
+                name: 'transaction_status',
+                type: 'options',
+                options: [
+                    { name: 'Aguardando Pagamento', value: 'WAITING_PAYMENT' },
+                    { name: 'Aprovada', value: 'APPROVED' },
+                    { name: 'Bloqueada', value: 'BLOCKED' },
+                    { name: 'Boleto Impresso', value: 'PRINTED_BILLET' },
+                    { name: 'Cancelada', value: 'CANCELLED' },
+                    { name: 'Chargeback', value: 'CHARGEBACK' },
+                    { name: 'Completa', value: 'COMPLETE' },
+                    { name: 'Em Análise', value: 'UNDER_ANALISYS' },
+                    { name: 'Em Disputa', value: 'PROTESTED' },
+                    { name: 'Expirada', value: 'EXPIRED' },
+                    { name: 'Iniciada', value: 'STARTED' },
+                    { name: 'Parcialmente Reembolsada', value: 'PARTIALLY_REFUNDED' },
+                    { name: 'Pré-Venda', value: 'PRE_ORDER' },
+                    { name: 'Processando', value: 'PROCESSING_TRANSACTION' },
+                    { name: 'Reembolsada', value: 'REFUNDED' },
+                    { name: 'Sem Fundos', value: 'NO_FUNDS' },
+                    { name: 'Vencida', value: 'OVERDUE' },
+                ],
+                default: 'APPROVED',
+                description: 'Filtrar por status da transação',
                 routing: {
                     send: {
                         type: 'query',
-                        property: 'affiliate_name',
+                        property: 'transaction_status',
                     },
                 },
             },
             {
-                displayName: 'Tipo de Pagamento',
+                displayName: 'Tipo De Pagamento',
                 name: 'payment_type',
                 type: 'options',
                 options: [
                     { name: 'Boleto', value: 'BILLET' },
-                    { name: 'Cartão de Crédito', value: 'CREDIT_CARD' },
+                    { name: 'Cartão De Crédito', value: 'CREDIT_CARD' },
                     { name: 'Débito Direto', value: 'DIRECT_DEBIT' },
                     { name: 'Google Pay', value: 'GOOGLE_PAY' },
                     { name: 'PayPal', value: 'PAYPAL' },
@@ -357,37 +388,6 @@ export const salesFields: INodeProperties[] = [
                     send: {
                         type: 'query',
                         property: 'payment_type',
-                    },
-                },
-            },
-            {
-                displayName: 'Código da Oferta',
-                name: 'offer_code',
-                type: 'string',
-                default: '',
-                description: 'Filtrar por código de oferta do produto',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'offer_code',
-                    },
-                },
-            },
-            {
-                displayName: 'Comissionado Como',
-                name: 'commission_as',
-                type: 'options',
-                options: [
-                    { name: 'Produtor', value: 'PRODUCER' },
-                    { name: 'Coprodutor', value: 'COPRODUCER' },
-                    { name: 'Afiliado', value: 'AFFILIATE' },
-                ],
-                default: 'PRODUCER',
-                description: 'Como o usuário foi comissionado pela venda',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'commission_as',
                     },
                 },
             },

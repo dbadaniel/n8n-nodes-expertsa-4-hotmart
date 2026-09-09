@@ -41,7 +41,7 @@ class HotmartApi {
                 },
                 default: '',
                 required: true,
-                description: 'O Client Secret das Credenciais de Desenvolvedor da Hotmart',
+                description: 'O Client Secret das Credenciais de Desenvolvedor da Hotmart.',
             },
             {
                 displayName: 'Token Basic',
@@ -52,7 +52,7 @@ class HotmartApi {
                 },
                 default: '',
                 required: true,
-                description: 'O Token Basic das Credenciais de Desenvolvedor da Hotmart (usado para autenticação OAuth)',
+                description: 'O Token Basic das Credenciais de Desenvolvedor da Hotmart (usado para autenticação OAuth).',
             },
         ];
     }

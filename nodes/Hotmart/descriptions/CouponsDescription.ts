@@ -19,7 +19,7 @@ export const couponsOperations: INodeProperties[] = [
                 action: 'Criar cupom',
             },
             {
-                name: 'Listar Cupons',
+                name: 'Get Many',
                 value: 'getAll',
                 description: 'Obter cupons de um produto específico',
                 action: 'Listar cupons',
@@ -37,7 +37,7 @@ export const couponsOperations: INodeProperties[] = [
 
 export const couponsFields: INodeProperties[] = [
     {
-        displayName: 'ID do Produto',
+        displayName: 'ID Do Produto',
         name: 'productId',
         type: 'string',
         required: true,
@@ -53,7 +53,7 @@ export const couponsFields: INodeProperties[] = [
 
     // Criar Cupom
     {
-        displayName: 'Código do Cupom',
+        displayName: 'Código Do Cupom',
         name: 'couponCode',
         type: 'string',
         required: true,
@@ -99,28 +99,28 @@ export const couponsFields: INodeProperties[] = [
         },
         options: [
             {
-                displayName: 'Data de Início',
+                displayName: 'Data De Início',
                 name: 'startDate',
                 type: 'dateTime',
                 default: '',
                 description: 'Data e hora em que o cupom será ativado',
             },
             {
-                displayName: 'Data de Fim',
+                displayName: 'Data De Fim',
                 name: 'endDate',
                 type: 'dateTime',
                 default: '',
                 description: 'Data e hora em que o cupom será desativado',
             },
             {
-                displayName: 'ID do Afiliado',
+                displayName: 'ID Do Afiliado',
                 name: 'affiliateId',
                 type: 'string',
                 default: '',
                 description: 'ID específico do afiliado para compartilhar o cupom exclusivamente',
             },
             {
-                displayName: 'IDs das Ofertas',
+                displayName: 'IDs Das Ofertas',
                 name: 'offerIds',
                 type: 'string',
                 default: '',
@@ -144,7 +144,7 @@ export const couponsFields: INodeProperties[] = [
         },
         options: [
             {
-                displayName: 'Código do Cupom',
+                displayName: 'Código Do Cupom',
                 name: 'code',
                 type: 'string',
                 default: '',
@@ -163,7 +163,7 @@ export const couponsFields: INodeProperties[] = [
             },
         },
         default: false,
-        description: 'Se ativado, retorna todos os cupons. Caso contrário, retorna até o limite especificado.',
+        description: 'Whether to return all results or only up to a given limit',
     },
     {
         displayName: 'Limite',
@@ -178,15 +178,15 @@ export const couponsFields: INodeProperties[] = [
         },
         typeOptions: {
             minValue: 1,
-            maxValue: 100,
+
         },
         default: 50,
-        description: 'Número máximo de cupons a retornar',
+        description: 'Max number of results to return',
     },
 
     // Excluir Cupom
     {
-        displayName: 'ID do Cupom',
+        displayName: 'ID Do Cupom',
         name: 'couponId',
         type: 'string',
         required: true,

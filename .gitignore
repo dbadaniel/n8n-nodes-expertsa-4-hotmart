@@ -25,3 +25,4 @@ PASSO_A_PASSO.txt
 .env
 .env.local
 docker-compose.yml
+.npmrc

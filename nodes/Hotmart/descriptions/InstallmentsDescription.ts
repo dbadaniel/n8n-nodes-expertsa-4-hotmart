@@ -16,7 +16,7 @@ export const installmentsOperations: INodeProperties[] = [
                 name: 'Gerar Negociação',
                 value: 'negotiate',
                 description: 'Gerar boleto ou PIX para negociar parcelas em atraso de inadimplentes',
-                action: 'Gerar negociação de parcelas',
+                action: 'Gerar negocia o de parcelas',
             },
         ],
         default: 'negotiate',
@@ -26,7 +26,7 @@ export const installmentsOperations: INodeProperties[] = [
 export const installmentsFields: INodeProperties[] = [
     // Gerar Negociação
     {
-        displayName: 'ID da Assinatura',
+        displayName: 'ID Da Assinatura',
         name: 'subscriptionId',
         type: 'string',
         required: true,
@@ -55,7 +55,7 @@ export const installmentsFields: INodeProperties[] = [
         description: 'Números das recorrências para negociar (separados por vírgula). Máximo de 5 valores. Para assinaturas com Club, apenas a última parcela pode ser negociada.',
     },
     {
-        displayName: 'Tipo de Pagamento',
+        displayName: 'Tipo De Pagamento',
         name: 'paymentType',
         type: 'options',
         required: true,
@@ -67,14 +67,14 @@ export const installmentsFields: INodeProperties[] = [
         },
         options: [
             {
-                name: 'PIX',
-                value: 'PIX',
-                description: 'Gerar código PIX para pagamento',
-            },
-            {
                 name: 'Boleto Bancário',
                 value: 'BILLET',
                 description: 'Gerar boleto bancário (requer CPF/CNPJ)',
+            },
+            {
+                name: 'PIX',
+                value: 'PIX',
+                description: 'Gerar código PIX para pagamento',
             },
         ],
         default: 'PIX',
@@ -107,10 +107,10 @@ export const installmentsFields: INodeProperties[] = [
             },
         },
         default: false,
-        description: 'Se ativado, permite oferecer desconto na negociação',
+        description: 'Whether to offer a discount during negotiation',
     },
     {
-        displayName: 'Tipo de Desconto',
+        displayName: 'Tipo De Desconto',
         name: 'discountType',
         type: 'hidden',
         displayOptions: {
@@ -124,7 +124,7 @@ export const installmentsFields: INodeProperties[] = [
         description: 'Tipo de desconto (atualmente só CUSTOM é suportado pela API)',
     },
     {
-        displayName: 'Valor do Desconto',
+        displayName: 'Valor Do Desconto',
         name: 'discountValue',
         type: 'number',
         typeOptions: {
