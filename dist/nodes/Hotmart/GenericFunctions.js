@@ -49,11 +49,11 @@ async function getAccessToken(credentials) {
         });
         if (!response.ok) {
             const errorText = await response.text();
-            throw new Error(`Falha na autenticação (${response.status}): ${errorText || response.statusText}`);
+            throw new Error(`Authentication failed (${response.status}): ${errorText || response.statusText}`);
         }
         const data = (await response.json());
         if (((_a = data.token_type) === null || _a === void 0 ? void 0 : _a.toLowerCase()) !== 'bearer') {
-            throw new Error(`Tipo de token inesperado: ${data.token_type}`);
+            throw new Error(`Unexpected token type: ${data.token_type}`);
         }
         tokenCache.set(cacheKey, {
             token: data.access_token,
@@ -63,7 +63,7 @@ async function getAccessToken(credentials) {
         return data.access_token;
     }
     catch (error) {
-        throw new Error(`Falha ao obter access token da Hotmart: ${error.message}`);
+        throw new Error(`Failed to get access token from Hotmart: ${error.message}`);
     }
 }
 async function hotmartApiRequest(method, endpoint, body = {}, qs = {}, retryCount = 0) {
@@ -98,9 +98,9 @@ async function hotmartApiRequest(method, endpoint, body = {}, qs = {}, retryCoun
             await delay(delayMs);
             return hotmartApiRequest.call(this, method, endpoint, body, qs, retryCount + 1);
         }
-        let errorMessage = err.message || 'Erro desconhecido na requisição';
+        let errorMessage = err.message || 'Unknown error in request';
         if (err.statusCode === 429) {
-            errorMessage = `Rate limit da API Hotmart excedido após ${RATE_LIMIT_RETRY_COUNT} tentativas. Aguarde alguns minutos antes de tentar novamente. Dica: reduza a frequência de requisições ou use paginação para buscar menos dados por vez.`;
+            errorMessage = `Hotmart API rate limit exceeded after ${RATE_LIMIT_RETRY_COUNT} attempts. Wait a few minutes before trying again. Tip: reduce the request frequency or use pagination to fetch less data at a time.`;
         }
         throw new n8n_workflow_1.NodeApiError(this.getNode(), {
             message: errorMessage
@@ -127,6 +127,6 @@ async function testHotmartCredentials(credentials) {
         return true;
     }
     catch (error) {
-        throw new Error(`Credenciais inválidas: ${error.message}`);
+        throw new Error(`Invalid credentials: ${error.message}`);
     }
 }

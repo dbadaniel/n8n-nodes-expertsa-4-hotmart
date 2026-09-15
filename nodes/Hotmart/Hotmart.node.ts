@@ -41,7 +41,7 @@ export class Hotmart implements INodeType {
         group: ['transform'],
         version: 1,
         subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-        description: 'Integração com a API da Hotmart com suporte a credenciais estáticas e tokens dinâmicos (modo SaaS).',
+        description: 'Integration with the Hotmart API, with support for static credentials and dynamic tokens (SaaS mode).',
         usableAsTool: true,
         defaults: {
             name: 'Hotmart',
@@ -60,29 +60,29 @@ export class Hotmart implements INodeType {
             },
         ],
         properties: [
-            // Seletor de modo de autenticação
+            // Authentication mode selector
             {
-                displayName: 'Modo De Autenticação',
+                displayName: 'Authentication Mode',
                 name: 'authMode',
                 type: 'options',
                 options: [
                     {
-                        name: 'Credenciais (Uso Pessoal)',
+                        name: 'Credentials (Personal Use)',
                         value: 'credentials',
-                        description: 'Usar credenciais salvas no n8n - ideal para uso pessoal/single-tenant',
+                        description: 'Use credentials saved in n8n - ideal for personal/single-tenant use',
                     },
                     {
-                        name: 'Token Dinâmico (Modo SaaS)',
+                        name: 'Dynamic Token (SaaS Mode)',
                         value: 'dynamic',
-                        description: 'Passar token de acesso dinamicamente - ideal para aplicações multi-tenant SaaS. Use a operação "Obter Access Token" para obter o token primeiro.',
+                        description: 'Pass the access token dynamically - ideal for multi-tenant SaaS applications. Use the "Get Access Token" operation to obtain the token first.',
                     },
                 ],
                 default: 'credentials',
-                description: 'Escolha como autenticar com a API da Hotmart',
+                description: 'Choose how to authenticate with the Hotmart API',
             },
-            // Campos de token dinâmico (exibidos apenas no modo SaaS)
+            // Dynamic token fields (shown only in SaaS mode)
             {
-                displayName: 'Token De Acesso',
+                displayName: 'Access Token',
                 name: 'accessToken',
                 type: 'string',
                 typeOptions: {
@@ -95,10 +95,10 @@ export class Hotmart implements INodeType {
                     },
                 },
                 default: '',
-                description: 'O token de acesso OAuth da Hotmart. Use a operação "Autenticação > Obter Access Token" para obter este token, ou passe de um node anterior.',
+                description: 'The Hotmart OAuth access token. Use the "Authentication > Get Access Token" operation to obtain this token, or pass it from a previous node.',
             },
             {
-                displayName: 'Ambiente',
+                displayName: 'Environment',
                 name: 'environment',
                 type: 'options',
                 displayOptions: {
@@ -109,7 +109,7 @@ export class Hotmart implements INodeType {
                 },
                 options: [
                     {
-                        name: 'Produção',
+                        name: 'Production',
                         value: 'production',
                     },
                     {
@@ -118,11 +118,11 @@ export class Hotmart implements INodeType {
                     },
                 ],
                 default: 'production',
-                description: 'O ambiente da Hotmart. IMPORTANTE: Credenciais de Produção só funcionam em Produção e vice-versa.',
+                description: 'The Hotmart environment. IMPORTANT: Production credentials only work in Production and vice versa.',
             },
-            // Opção de metadados de paginação para AI Agents
+            // Pagination metadata option for AI Agents
             {
-                displayName: 'Incluir Metadados De Paginação',
+                displayName: 'Include Pagination Metadata',
                 name: 'includePaginationMetadata',
                 type: 'boolean',
                 default: false,
@@ -133,49 +133,49 @@ export class Hotmart implements INodeType {
                     },
                 },
             },
-            // Seletor de recurso
+            // Resource selector
             {
-                displayName: 'Recurso',
+                displayName: 'Resource',
                 name: 'resource',
                 type: 'options',
                 noDataExpression: true,
                 options: [
                     {
-                        name: 'Área De Membro',
+                        name: 'Member Area',
                         value: 'members',
                     },
                     {
-                        name: 'Assinatura',
+                        name: 'Subscription',
                         value: 'subscriptions',
                     },
                     {
-                        name: 'Autenticação',
+                        name: 'Authentication',
                         value: 'auth',
                     },
                     {
-                        name: 'Cupom',
+                        name: 'Coupon',
                         value: 'coupons',
                     },
                     {
-                        name: 'Evento',
+                        name: 'Event',
                         value: 'events',
                     },
                     {
-                        name: 'Negociação De Parcela',
+                        name: 'Installment Negotiation',
                         value: 'installments',
                     },
                     {
-                        name: 'Produto',
+                        name: 'Product',
                         value: 'products',
                     },
                     {
-                        name: 'Venda',
+                        name: 'Sale',
                         value: 'sales',
                     },
                 ],
                 default: 'sales',
             },
-            // Operações e campos
+            // Operations and fields
             ...authOperations,
             ...authFields,
             ...salesOperations,
@@ -203,7 +203,7 @@ export class Hotmart implements INodeType {
         const resource = this.getNodeParameter('resource', 0) as string;
         const operation = this.getNodeParameter('operation', 0) as string;
 
-        // Recurso Auth é tratado separadamente (não requer autenticação prévia)
+        // The Auth resource is handled separately (does not require prior authentication)
         if (resource === 'auth') {
             if (operation === 'getAccessToken') {
                 for (let i = 0; i < items.length; i++) {
@@ -220,7 +220,7 @@ export class Hotmart implements INodeType {
                             basicToken,
                         });
 
-                        // Tokens Hotmart expiram em 7200 segundos (2 horas)
+                        // Hotmart tokens expire in 7200 seconds (2 hours)
                         const expiresIn = 7200;
                         const expiresAt = new Date(Date.now() + expiresIn * 1000).toISOString();
 
@@ -249,12 +249,12 @@ export class Hotmart implements INodeType {
             return [returnData];
         }
 
-        // Para outros recursos, obter autenticação
+        // For other resources, obtain authentication
         let accessToken: string;
         let baseUrl: string;
 
         if (authMode === 'credentials') {
-            // Modo credenciais do n8n
+            // n8n credentials mode
             const credentials = await this.getCredentials('hotmartApi');
             accessToken = await getAccessToken({
                 environment: credentials.environment as 'production' | 'sandbox',
@@ -264,12 +264,12 @@ export class Hotmart implements INodeType {
             });
             baseUrl = getBaseUrl(credentials.environment as string);
         } else {
-            // Modo dinâmico/SaaS - token passado diretamente
+            // Dynamic/SaaS mode - token passed directly
             accessToken = this.getNodeParameter('accessToken', 0, '') as string;
             const environment = this.getNodeParameter('environment', 0, 'production') as string;
 
             if (!accessToken) {
-                throw new NodeOperationError(this.getNode(), 'Token de Acesso é obrigatório no modo SaaS. Use a operação "Autenticação > Obter Access Token" primeiro.');
+                throw new NodeOperationError(this.getNode(), 'Access Token is required in SaaS mode. Use the "Authentication > Get Access Token" operation first.');
             }
 
             baseUrl = getBaseUrl(environment);
@@ -277,7 +277,7 @@ export class Hotmart implements INodeType {
 
         for (let i = 0; i < items.length; i++) {
             try {
-                // No modo SaaS, permite tokens diferentes por item
+                // In SaaS mode, allow different tokens per item
                 let itemAccessToken = accessToken;
                 let itemBaseUrl = baseUrl;
 
@@ -295,7 +295,7 @@ export class Hotmart implements INodeType {
                 const qs: IDataObject = {};
                 let body: IDataObject = {};
 
-                // Construir requisição baseada no recurso e operação
+                // Build the request based on resource and operation
                 if (resource === 'sales') {
                     if (operation === 'getAll') {
                         endpoint = '/payments/api/v1/sales/history';
@@ -313,7 +313,7 @@ export class Hotmart implements INodeType {
                         method = 'PUT';
                     }
 
-                    // Aplicar filtros e limite para operações de consulta
+                    // Apply filters and limit for query operations
                     if (['getAll', 'getCommissions', 'getPriceDetails', 'getSummary', 'getUsers'].includes(operation)) {
                         const filters = this.getNodeParameter('filters', i, {}) as IDataObject;
                         Object.assign(qs, filters);
@@ -378,7 +378,7 @@ export class Hotmart implements INodeType {
                         body = { due_day: dueDay };
                     }
 
-                    // Aplicar filtros para operações de listagem
+                    // Apply filters for listing operations
                     if (['getAll', 'getSummary', 'getPurchases', 'getTransactions'].includes(operation)) {
                         const filters = this.getNodeParameter('filters', i, {}) as IDataObject;
                         Object.assign(qs, filters);
@@ -443,13 +443,13 @@ export class Hotmart implements INodeType {
                                 qs.status = filters.status;
                             }
                         } else {
-                            // Modo detalhado: aceita ID interno ou E-mail do aluno a partir de filters
+                            // Detailed mode: accepts internal ID or student email from filters
                             let userId = ((filters.userId as string) || '').trim().replace(/["']/g, '');
                             const email = ((filters.email as string) || '').trim().replace(/["']/g, '');
 
                             if (!userId && !email) {
                                 throw new NodeApiError(this.getNode(), {
-                                    message: `No modo "Aulas Detalhadas", adicione o filtro "Email" ou "ID do Aluno (user_id)" para especificar qual aluno deseja consultar.`,
+                                    message: `In "Detailed Lessons" mode, add the "Email" or "Student ID (user_id)" filter to specify which student you want to query.`,
                                 } as JsonObject);
                             }
 
@@ -494,7 +494,7 @@ export class Hotmart implements INodeType {
                                     userId = foundUserId;
                                 } else {
                                     throw new NodeApiError(this.getNode(), {
-                                        message: `Nenhum aluno encontrado com o e-mail "${searchEmail}" na área de membros "${subdomain}".`,
+                                        message: `No student found with the email "${searchEmail}" in the member area "${subdomain}".`,
                                     } as JsonObject);
                                 }
                             }
@@ -503,7 +503,7 @@ export class Hotmart implements INodeType {
                         }
                     }
 
-                    // Aplicar filtros para operações de listagem
+                    // Apply filters for listing operations
                     const isSummaryProgress = operation === 'getStudentProgress' && this.getNodeParameter('progressMode', i, 'summary') === 'summary';
                     if (['getStudents', 'getStudentsProgress', 'getModules', 'getPages'].includes(operation) || isSummaryProgress) {
                         if (['getStudents', 'getStudentsProgress', 'getModules'].includes(operation)) {
@@ -528,7 +528,7 @@ export class Hotmart implements INodeType {
 
                         const couponCode = this.getNodeParameter('couponCode', i) as string;
                         const discountPercent = this.getNodeParameter('discount', i) as number;
-                        // Converter percentual (1-99) para decimal (0.01-0.99)
+                        // Convert percentage (1-99) to decimal (0.01-0.99)
                         const discount = discountPercent / 100;
 
                         body = {
@@ -579,7 +579,7 @@ export class Hotmart implements INodeType {
                         const recurrencesStr = this.getNodeParameter('recurrences', i) as string;
                         const paymentType = this.getNodeParameter('paymentType', i) as string;
 
-                        // Converter string de recorrências para array de números
+                        // Convert recurrences string to array of numbers
                         const recurrences = recurrencesStr.split(',').map(r => parseInt(r.trim(), 10)).filter(r => !isNaN(r));
 
                         body = {
@@ -588,13 +588,13 @@ export class Hotmart implements INodeType {
                             payment_type: paymentType,
                         };
 
-                        // Adicionar documento para pagamento via boleto
+                        // Add document for payment via billet
                         if (paymentType === 'BILLET') {
                             const document = this.getNodeParameter('document', i) as string;
-                            body.document = document.replace(/[.\-\/]/g, ''); // Remove formatação
+                            body.document = document.replace(/[.\-\/]/g, ''); // Remove formatting
                         }
 
-                        // Adicionar desconto se habilitado
+                        // Add discount if enabled
                         const offerDiscount = this.getNodeParameter('offerDiscount', i, false) as boolean;
                         if (offerDiscount) {
                             const discountType = this.getNodeParameter('discountType', i) as string;
@@ -626,7 +626,7 @@ export class Hotmart implements INodeType {
                     }
                 }
 
-                // Fazer requisição à API
+                // Make the request to the API
                 const requestOptions = {
                     method,
                     url: `${itemBaseUrl}${endpoint}`,
@@ -641,12 +641,12 @@ export class Hotmart implements INodeType {
 
                 const response = await this.helpers.httpRequest(requestOptions);
 
-                // Verificar se deve incluir metadados de paginação
+                // Check whether pagination metadata should be included
                 const includePaginationMetadata = this.getNodeParameter('includePaginationMetadata', i, false) as boolean;
 
-                // Tratar resposta
+                // Handle response
                 if (response.items && Array.isArray(response.items)) {
-                    // Se for getStudentsProgress ou getStudentProgress no modo summary, formatar dados de progresso no primeiro nível
+                    // If getStudentsProgress or getStudentProgress in summary mode, format progress data at the top level
                     const isProgressSummary =
                         operation === 'getStudentsProgress' ||
                         (operation === 'getStudentProgress' && this.getNodeParameter('progressMode', i, 'summary') === 'summary');
@@ -685,7 +685,7 @@ export class Hotmart implements INodeType {
                     }
 
                     if (includePaginationMetadata) {
-                        // Retornar com metadados para AI Agents
+                        // Return with metadata for AI Agents
                         returnData.push({
                             json: {
                                 _metadata: {
@@ -698,7 +698,7 @@ export class Hotmart implements INodeType {
                             pairedItem: { item: i },
                         });
                     } else {
-                        // Comportamento padrão - cada item separado
+                        // Default behavior - each item separate
                         for (const item of itemsToProcess) {
                             returnData.push({
                                 json: item as IDataObject,
@@ -707,16 +707,16 @@ export class Hotmart implements INodeType {
                         }
                     }
                 } else {
-                    // Retornar resposta completa
+                    // Return the full response
                     returnData.push({
                         json: response as IDataObject,
                         pairedItem: { item: i },
                     });
                 }
             } catch (error) {
-                // Extrair mensagem de erro de forma segura para evitar referências circulares
+                // Safely extract the error message to avoid circular references
                 const err = error as { message?: string; response?: { data?: { message?: string } }; statusCode?: number };
-                const errorMessage = err.response?.data?.message || err.message || 'Erro desconhecido na requisição';
+                const errorMessage = err.response?.data?.message || err.message || 'Unknown error in request';
 
                 if (this.continueOnFail()) {
                     returnData.push({

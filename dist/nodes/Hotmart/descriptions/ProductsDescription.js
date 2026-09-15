@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.productsFields = exports.productsOperations = void 0;
 exports.productsOperations = [
     {
-        displayName: 'Operação',
+        displayName: 'Operation',
         name: 'operation',
         type: 'options',
         noDataExpression: true,
@@ -16,8 +16,8 @@ exports.productsOperations = [
             {
                 name: 'Get Many',
                 value: 'getAll',
-                description: 'Obter todos os produtos',
-                action: 'Listar todos os produtos',
+                description: 'Get all products',
+                action: 'List all products',
                 routing: {
                     request: {
                         method: 'GET',
@@ -36,10 +36,10 @@ exports.productsOperations = [
                 },
             },
             {
-                name: 'Listar Ofertas Do Produto',
+                name: 'List Product Offers',
                 value: 'getOffers',
-                description: 'Obter ofertas de um produto',
-                action: 'Listar ofertas do produto',
+                description: 'Get the offers of a product',
+                action: 'List product offers',
                 routing: {
                     request: {
                         method: 'GET',
@@ -58,10 +58,10 @@ exports.productsOperations = [
                 },
             },
             {
-                name: 'Listar Planos Do Produto',
+                name: 'List Product Plans',
                 value: 'getPlans',
-                description: 'Obter planos de assinatura de um produto',
-                action: 'Listar planos do produto',
+                description: 'Get the subscription plans of a product',
+                action: 'List product plans',
                 routing: {
                     request: {
                         method: 'GET',
@@ -85,7 +85,7 @@ exports.productsOperations = [
 ];
 exports.productsFields = [
     {
-        displayName: 'UUID Do Produto',
+        displayName: 'Product UUID',
         name: 'productUcode',
         type: 'string',
         required: true,
@@ -97,10 +97,10 @@ exports.productsFields = [
         },
         default: '',
         placeholder: 'ab907e46-a9aa-4d25-ae4f-cec316d01560',
-        description: 'Identificador único (UUID) do produto',
+        description: 'Unique identifier (UUID) of the product',
     },
     {
-        displayName: 'Retornar Todos',
+        displayName: 'Return All',
         name: 'returnAll',
         type: 'boolean',
         displayOptions: {
@@ -113,7 +113,7 @@ exports.productsFields = [
         description: 'Whether to return all results or only up to a given limit',
     },
     {
-        displayName: 'Limite',
+        displayName: 'Limit',
         name: 'limit',
         type: 'number',
         displayOptions: {
@@ -136,10 +136,10 @@ exports.productsFields = [
         },
     },
     {
-        displayName: 'Filtros',
+        displayName: 'Filters',
         name: 'filters',
         type: 'collection',
-        placeholder: 'Adicionar Filtro',
+        placeholder: 'Add Filter',
         default: {},
         displayOptions: {
             show: {
@@ -149,28 +149,28 @@ exports.productsFields = [
         },
         options: [
             {
-                displayName: 'Formato',
+                displayName: 'Format',
                 name: 'format',
                 type: 'options',
                 options: [
-                    { name: 'Agente', value: 'AGENT' },
-                    { name: 'Áudios', value: 'AUDIOS' },
+                    { name: 'Agent', value: 'AGENT' },
+                    { name: 'Audios', value: 'AUDIOS' },
                     { name: 'Bundle', value: 'BUNDLE' },
-                    { name: 'Códigos Seriais', value: 'SERIAL_CODES' },
-                    { name: 'Comunidade', value: 'COMMUNITY' },
-                    { name: 'Curso Online', value: 'ONLINE_COURSE' },
+                    { name: 'Serial Codes', value: 'SERIAL_CODES' },
+                    { name: 'Community', value: 'COMMUNITY' },
+                    { name: 'Online Course', value: 'ONLINE_COURSE' },
                     { name: 'E-Book', value: 'EBOOK' },
                     { name: 'E-Ticket', value: 'ETICKET' },
-                    { name: 'Evento Online', value: 'ONLINE_EVENT' },
-                    { name: 'Imagens', value: 'IMAGES' },
+                    { name: 'Online Event', value: 'ONLINE_EVENT' },
+                    { name: 'Images', value: 'IMAGES' },
                     { name: 'Mobile Apps', value: 'MOBILE_APPS' },
-                    { name: 'Serviço Online', value: 'ONLINE_SERVICE' },
+                    { name: 'Online Service', value: 'ONLINE_SERVICE' },
                     { name: 'Software', value: 'SOFTWARE' },
                     { name: 'Templates', value: 'TEMPLATES' },
-                    { name: 'Vídeos', value: 'VIDEOS' },
+                    { name: 'Videos', value: 'VIDEOS' },
                 ],
                 default: 'ONLINE_COURSE',
-                description: 'Filtrar por formato do produto',
+                description: 'Filter by product format',
                 routing: {
                     send: {
                         type: 'query',
@@ -179,11 +179,11 @@ exports.productsFields = [
                 },
             },
             {
-                displayName: 'ID Do Produto',
+                displayName: 'Product ID',
                 name: 'id',
                 type: 'number',
                 default: 0,
-                description: 'Filtrar por ID específico do produto',
+                description: 'Filter by specific product ID',
                 routing: {
                     send: {
                         type: 'query',
@@ -196,16 +196,16 @@ exports.productsFields = [
                 name: 'status',
                 type: 'options',
                 options: [
-                    { name: 'Alterações Pendentes', value: 'CHANGES_PENDING_ON_PRODUCT' },
-                    { name: 'Ativo', value: 'ACTIVE' },
-                    { name: 'Deletado', value: 'DELETED' },
-                    { name: 'Em Revisão', value: 'IN_REVIEW' },
-                    { name: 'Não Aprovado', value: 'NOT_APPROVED' },
-                    { name: 'Pausado', value: 'PAUSED' },
-                    { name: 'Rascunho', value: 'DRAFT' },
+                    { name: 'Changes Pending', value: 'CHANGES_PENDING_ON_PRODUCT' },
+                    { name: 'Active', value: 'ACTIVE' },
+                    { name: 'Deleted', value: 'DELETED' },
+                    { name: 'In Review', value: 'IN_REVIEW' },
+                    { name: 'Not Approved', value: 'NOT_APPROVED' },
+                    { name: 'Paused', value: 'PAUSED' },
+                    { name: 'Draft', value: 'DRAFT' },
                 ],
                 default: 'ACTIVE',
-                description: 'Filtrar por status do produto',
+                description: 'Filter by product status',
                 routing: {
                     send: {
                         type: 'query',

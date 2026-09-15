@@ -2,7 +2,7 @@ import type { INodeProperties } from 'n8n-workflow';
 
 export const authOperations: INodeProperties[] = [
     {
-        displayName: 'Operação',
+        displayName: 'Operation',
         name: 'operation',
         type: 'options',
         noDataExpression: true,
@@ -13,10 +13,10 @@ export const authOperations: INodeProperties[] = [
         },
         options: [
             {
-                name: 'Obter Access Token',
+                name: 'Get Access Token',
                 value: 'getAccessToken',
-                description: 'Obter um access token usando suas credenciais OAuth. Use este token nas operações subsequentes do modo SaaS.',
-                action: 'Obter access token',
+                description: 'Get an access token using your OAuth credentials. Use this token in subsequent SaaS mode operations.',
+                action: 'Get access token',
             },
         ],
         default: 'getAccessToken',
@@ -25,7 +25,7 @@ export const authOperations: INodeProperties[] = [
 
 export const authFields: INodeProperties[] = [
     // ----------------------------------
-    //         Obter Access Token
+    //         Get Access Token
     // ----------------------------------
     {
         displayName: 'Client ID',
@@ -39,7 +39,7 @@ export const authFields: INodeProperties[] = [
             },
         },
         default: '',
-        description: 'O Client ID das suas Credenciais de Desenvolvedor da Hotmart. Encontre em: sua conta Hotmart → Ferramentas → Credenciais Developers.',
+        description: 'The Client ID from your Hotmart Developer Credentials. Find it in: your Hotmart account -> Tools -> Developer Credentials.',
     },
     {
         displayName: 'Client Secret',
@@ -56,10 +56,10 @@ export const authFields: INodeProperties[] = [
             },
         },
         default: '',
-        description: 'O Client Secret das suas Credenciais de Desenvolvedor da Hotmart. Mantenha este valor seguro e nunca compartilhe.',
+        description: 'The Client Secret from your Hotmart Developer Credentials. Keep this value secure and never share it.',
     },
     {
-        displayName: 'Token Basic',
+        displayName: 'Basic Token',
         name: 'authBasicToken',
         type: 'string',
         typeOptions: {
@@ -73,10 +73,10 @@ export const authFields: INodeProperties[] = [
             },
         },
         default: '',
-        description: 'O Token Basic para autenticação OAuth. IMPORTANTE: Não inclua o prefixo "Basic " - apenas o token em si. Este é o valor Base64 da string client_id:client_secret.',
+        description: 'The Basic Token for OAuth authentication. IMPORTANT: Do not include the "Basic " prefix - only the token itself. This is the Base64 value of the client_id:client_secret string.',
     },
     {
-        displayName: 'Ambiente',
+        displayName: 'Environment',
         name: 'authEnvironment',
         type: 'options',
         required: true,
@@ -88,7 +88,7 @@ export const authFields: INodeProperties[] = [
         },
         options: [
             {
-                name: 'Produção',
+                name: 'Production',
                 value: 'production',
             },
             {
@@ -97,6 +97,6 @@ export const authFields: INodeProperties[] = [
             },
         ],
         default: 'production',
-        description: 'O ambiente da Hotmart. IMPORTANTE: Credenciais de Produção só funcionam em Produção. Credenciais de Sandbox só funcionam em Sandbox.',
+        description: 'The Hotmart environment. IMPORTANT: Production credentials only work in Production. Sandbox credentials only work in Sandbox.',
     },
 ];

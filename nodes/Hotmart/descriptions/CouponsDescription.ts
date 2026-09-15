@@ -2,7 +2,7 @@ import type { INodeProperties } from 'n8n-workflow';
 
 export const couponsOperations: INodeProperties[] = [
     {
-        displayName: 'Operação',
+        displayName: 'Operation',
         name: 'operation',
         type: 'options',
         noDataExpression: true,
@@ -13,22 +13,22 @@ export const couponsOperations: INodeProperties[] = [
         },
         options: [
             {
-                name: 'Criar Cupom',
+                name: 'Create Coupon',
                 value: 'create',
-                description: 'Criar um novo cupom de desconto para um produto',
-                action: 'Criar cupom',
+                description: 'Create a new discount coupon for a product',
+                action: 'Create coupon',
             },
             {
                 name: 'Get Many',
                 value: 'getAll',
-                description: 'Obter cupons de um produto específico',
-                action: 'Listar cupons',
+                description: 'Get coupons for a specific product',
+                action: 'List coupons',
             },
             {
-                name: 'Excluir Cupom',
+                name: 'Delete Coupon',
                 value: 'delete',
-                description: 'Excluir um cupom específico',
-                action: 'Excluir cupom',
+                description: 'Delete a specific coupon',
+                action: 'Delete coupon',
             },
         ],
         default: 'getAll',
@@ -37,7 +37,7 @@ export const couponsOperations: INodeProperties[] = [
 
 export const couponsFields: INodeProperties[] = [
     {
-        displayName: 'ID Do Produto',
+        displayName: 'Product ID',
         name: 'productId',
         type: 'string',
         required: true,
@@ -48,12 +48,12 @@ export const couponsFields: INodeProperties[] = [
             },
         },
         default: '',
-        description: 'Identificador único (ID) do produto (número de 7 dígitos)',
+        description: 'Unique identifier (ID) of the product (7-digit number)',
     },
 
-    // Criar Cupom
+    // Create Coupon
     {
-        displayName: 'Código Do Cupom',
+        displayName: 'Coupon Code',
         name: 'couponCode',
         type: 'string',
         required: true,
@@ -64,10 +64,10 @@ export const couponsFields: INodeProperties[] = [
             },
         },
         default: '',
-        description: 'Código do cupom que o cliente usará no checkout (máximo 25 caracteres)',
+        description: 'Coupon code the customer will use at checkout (25 characters maximum)',
     },
     {
-        displayName: 'Desconto (%)',
+        displayName: 'Discount (%)',
         name: 'discount',
         type: 'number',
         required: true,
@@ -83,13 +83,13 @@ export const couponsFields: INodeProperties[] = [
             },
         },
         default: 10,
-        description: 'Percentual de desconto (1-99). Exemplo: 10 para 10% de desconto.',
+        description: 'Discount percentage (1-99). Example: 10 for a 10% discount.',
     },
     {
-        displayName: 'Opções Adicionais',
+        displayName: 'Additional Options',
         name: 'additionalOptions',
         type: 'collection',
-        placeholder: 'Adicionar opção',
+        placeholder: 'Add Option',
         default: {},
         displayOptions: {
             show: {
@@ -99,42 +99,42 @@ export const couponsFields: INodeProperties[] = [
         },
         options: [
             {
-                displayName: 'Data De Início',
+                displayName: 'Start Date',
                 name: 'startDate',
                 type: 'dateTime',
                 default: '',
-                description: 'Data e hora em que o cupom será ativado',
+                description: 'Date and time the coupon will be activated',
             },
             {
-                displayName: 'Data De Fim',
+                displayName: 'End Date',
                 name: 'endDate',
                 type: 'dateTime',
                 default: '',
-                description: 'Data e hora em que o cupom será desativado',
+                description: 'Date and time the coupon will be deactivated',
             },
             {
-                displayName: 'ID Do Afiliado',
+                displayName: 'Affiliate ID',
                 name: 'affiliateId',
                 type: 'string',
                 default: '',
-                description: 'ID específico do afiliado para compartilhar o cupom exclusivamente',
+                description: 'Specific affiliate ID to share the coupon exclusively',
             },
             {
-                displayName: 'IDs Das Ofertas',
+                displayName: 'Offer IDs',
                 name: 'offerIds',
                 type: 'string',
                 default: '',
-                description: 'Códigos das ofertas onde aplicar o cupom (separados por vírgula)',
+                description: 'Offer codes to apply the coupon to (comma-separated)',
             },
         ],
     },
 
-    // Listar Cupons
+    // List Coupons
     {
-        displayName: 'Filtros',
+        displayName: 'Filters',
         name: 'filters',
         type: 'collection',
-        placeholder: 'Adicionar filtro',
+        placeholder: 'Add Filter',
         default: {},
         displayOptions: {
             show: {
@@ -144,16 +144,16 @@ export const couponsFields: INodeProperties[] = [
         },
         options: [
             {
-                displayName: 'Código Do Cupom',
+                displayName: 'Coupon Code',
                 name: 'code',
                 type: 'string',
                 default: '',
-                description: 'Filtrar por código de cupom específico',
+                description: 'Filter by a specific coupon code',
             },
         ],
     },
     {
-        displayName: 'Retornar Todos',
+        displayName: 'Return All',
         name: 'returnAll',
         type: 'boolean',
         displayOptions: {
@@ -166,7 +166,7 @@ export const couponsFields: INodeProperties[] = [
         description: 'Whether to return all results or only up to a given limit',
     },
     {
-        displayName: 'Limite',
+        displayName: 'Limit',
         name: 'limit',
         type: 'number',
         displayOptions: {
@@ -184,9 +184,9 @@ export const couponsFields: INodeProperties[] = [
         description: 'Max number of results to return',
     },
 
-    // Excluir Cupom
+    // Delete Coupon
     {
-        displayName: 'ID Do Cupom',
+        displayName: 'Coupon ID',
         name: 'couponId',
         type: 'string',
         required: true,
@@ -197,6 +197,6 @@ export const couponsFields: INodeProperties[] = [
             },
         },
         default: '',
-        description: 'Identificador único (ID) do cupom a ser excluído',
+        description: 'Unique identifier (ID) of the coupon to delete',
     },
 ];

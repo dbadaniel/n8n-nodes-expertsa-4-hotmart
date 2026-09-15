@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.subscriptionsFields = exports.subscriptionsOperations = void 0;
 exports.subscriptionsOperations = [
     {
-        displayName: 'Operação',
+        displayName: 'Operation',
         name: 'operation',
         type: 'options',
         noDataExpression: true,
@@ -14,10 +14,10 @@ exports.subscriptionsOperations = [
         },
         options: [
             {
-                name: 'Alterar Data De Cobrança',
+                name: 'Change Billing Date',
                 value: 'changeBillingDate',
-                description: 'Alterar data de cobrança da assinatura',
-                action: 'Alterar data de cobran a',
+                description: 'Change the subscription billing date',
+                action: 'Change billing date',
                 routing: {
                     request: {
                         method: 'PATCH',
@@ -29,10 +29,10 @@ exports.subscriptionsOperations = [
                 },
             },
             {
-                name: 'Cancelar Assinatura',
+                name: 'Cancel Subscription',
                 value: 'cancel',
-                description: 'Cancelar uma assinatura',
-                action: 'Cancelar uma assinatura',
+                description: 'Cancel a subscription',
+                action: 'Cancel a subscription',
                 routing: {
                     request: {
                         method: 'POST',
@@ -41,10 +41,10 @@ exports.subscriptionsOperations = [
                 },
             },
             {
-                name: 'Cancelar Lista De Assinaturas',
+                name: 'Cancel Subscription List',
                 value: 'cancelBatch',
-                description: 'Cancelar múltiplas assinaturas de uma vez',
-                action: 'Cancelar lista de assinaturas',
+                description: 'Cancel multiple subscriptions at once',
+                action: 'Cancel subscription list',
                 routing: {
                     request: {
                         method: 'POST',
@@ -53,10 +53,10 @@ exports.subscriptionsOperations = [
                 },
             },
             {
-                name: 'Compras De Assinatura',
+                name: 'Subscription Purchases',
                 value: 'getPurchases',
-                description: 'Obter compras de assinatura',
-                action: 'Listar compras de assinatura',
+                description: 'Get subscription purchases',
+                action: 'List subscription purchases',
                 routing: {
                     request: {
                         method: 'GET',
@@ -75,10 +75,10 @@ exports.subscriptionsOperations = [
                 },
             },
             {
-                name: 'Compras Do Assinante',
+                name: 'Subscriber Purchases',
                 value: 'getSubscriberPurchases',
-                description: 'Obter compras de um assinante específico',
-                action: 'Listar compras do assinante',
+                description: 'Get the purchases of a specific subscriber',
+                action: 'List subscriber purchases',
                 routing: {
                     request: {
                         method: 'GET',
@@ -89,8 +89,8 @@ exports.subscriptionsOperations = [
             {
                 name: 'Get Many',
                 value: 'getAll',
-                description: 'Obter todas as assinaturas',
-                action: 'Listar todas as assinaturas',
+                description: 'Get all subscriptions',
+                action: 'List all subscriptions',
                 routing: {
                     request: {
                         method: 'GET',
@@ -109,10 +109,10 @@ exports.subscriptionsOperations = [
                 },
             },
             {
-                name: 'Reativar Assinatura',
+                name: 'Reactivate Subscription',
                 value: 'reactivate',
-                description: 'Reativar uma assinatura',
-                action: 'Reativar uma assinatura',
+                description: 'Reactivate a subscription',
+                action: 'Reactivate a subscription',
                 routing: {
                     request: {
                         method: 'POST',
@@ -121,10 +121,10 @@ exports.subscriptionsOperations = [
                 },
             },
             {
-                name: 'Reativar Lista De Assinaturas',
+                name: 'Reactivate Subscription List',
                 value: 'reactivateBatch',
-                description: 'Reativar múltiplas assinaturas de uma vez',
-                action: 'Reativar lista de assinaturas',
+                description: 'Reactivate multiple subscriptions at once',
+                action: 'Reactivate subscription list',
                 routing: {
                     request: {
                         method: 'POST',
@@ -133,10 +133,10 @@ exports.subscriptionsOperations = [
                 },
             },
             {
-                name: 'Resumo De Assinaturas',
+                name: 'Subscriptions Summary',
                 value: 'getSummary',
-                description: 'Obter resumo das assinaturas',
-                action: 'Obter resumo das assinaturas',
+                description: 'Get the subscriptions summary',
+                action: 'Get subscriptions summary',
                 routing: {
                     request: {
                         method: 'GET',
@@ -145,10 +145,10 @@ exports.subscriptionsOperations = [
                 },
             },
             {
-                name: 'Transações De Assinatura',
+                name: 'Subscription Transactions',
                 value: 'getTransactions',
-                description: 'Obter transações detalhadas das assinaturas',
-                action: 'Listar transa es de assinatura',
+                description: 'Get detailed subscription transactions',
+                action: 'List subscription transactions',
                 routing: {
                     request: {
                         method: 'GET',
@@ -172,7 +172,7 @@ exports.subscriptionsOperations = [
 ];
 exports.subscriptionsFields = [
     {
-        displayName: 'Código Do Assinante',
+        displayName: 'Subscriber Code',
         name: 'subscriberCode',
         type: 'string',
         required: true,
@@ -183,10 +183,10 @@ exports.subscriptionsFields = [
             },
         },
         default: '',
-        description: 'O código do assinante para operar',
+        description: 'The subscriber code to operate on',
     },
     {
-        displayName: 'Dia De Vencimento',
+        displayName: 'Due Day',
         name: 'dueDay',
         type: 'number',
         required: true,
@@ -201,10 +201,10 @@ exports.subscriptionsFields = [
             maxValue: 31,
         },
         default: 1,
-        description: 'O novo dia de vencimento para cobrança (1-31)',
+        description: 'The new due day for billing (1-31)',
     },
     {
-        displayName: 'Enviar Email',
+        displayName: 'Send Email',
         name: 'sendMail',
         type: 'boolean',
         displayOptions: {
@@ -223,7 +223,7 @@ exports.subscriptionsFields = [
         },
     },
     {
-        displayName: 'Códigos Dos Assinantes',
+        displayName: 'Subscriber Codes',
         name: 'subscriberCodes',
         type: 'string',
         required: true,
@@ -235,7 +235,7 @@ exports.subscriptionsFields = [
         },
         default: '',
         placeholder: 'ABC123, DEF456, GHI789',
-        description: 'Lista de códigos de assinantes separados por vírgula',
+        description: 'List of subscriber codes separated by commas',
         routing: {
             send: {
                 type: 'body',
@@ -245,7 +245,7 @@ exports.subscriptionsFields = [
         },
     },
     {
-        displayName: 'Gerar Nova Cobrança',
+        displayName: 'Generate New Charge',
         name: 'charge',
         type: 'boolean',
         displayOptions: {
@@ -264,7 +264,7 @@ exports.subscriptionsFields = [
         },
     },
     {
-        displayName: 'Retornar Todos',
+        displayName: 'Return All',
         name: 'returnAll',
         type: 'boolean',
         displayOptions: {
@@ -277,7 +277,7 @@ exports.subscriptionsFields = [
         description: 'Whether to return all results or only up to a given limit',
     },
     {
-        displayName: 'Limite',
+        displayName: 'Limit',
         name: 'limit',
         type: 'number',
         displayOptions: {
@@ -300,10 +300,10 @@ exports.subscriptionsFields = [
         },
     },
     {
-        displayName: 'Filtros',
+        displayName: 'Filters',
         name: 'filters',
         type: 'collection',
-        placeholder: 'Adicionar Filtro',
+        placeholder: 'Add Filter',
         default: {},
         displayOptions: {
             show: {
@@ -313,11 +313,11 @@ exports.subscriptionsFields = [
         },
         options: [
             {
-                displayName: 'Código Da Oferta',
+                displayName: 'Offer Code',
                 name: 'offer_code',
                 type: 'string',
                 default: '',
-                description: 'Filtrar por código da oferta',
+                description: 'Filter by offer code',
                 routing: {
                     send: {
                         type: 'query',
@@ -326,11 +326,11 @@ exports.subscriptionsFields = [
                 },
             },
             {
-                displayName: 'Código Da Transação',
+                displayName: 'Transaction Code',
                 name: 'transaction',
                 type: 'string',
                 default: '',
-                description: 'Filtrar por código da transação',
+                description: 'Filter by transaction code',
                 routing: {
                     send: {
                         type: 'query',
@@ -339,11 +339,11 @@ exports.subscriptionsFields = [
                 },
             },
             {
-                displayName: 'Código Do Assinante',
+                displayName: 'Subscriber Code',
                 name: 'subscriber_code',
                 type: 'string',
                 default: '',
-                description: 'Filtrar por código do assinante',
+                description: 'Filter by subscriber code',
                 routing: {
                     send: {
                         type: 'query',
@@ -352,11 +352,11 @@ exports.subscriptionsFields = [
                 },
             },
             {
-                displayName: 'Data Cancelamento (Fim)',
+                displayName: 'Cancellation Date (End)',
                 name: 'end_cancelation_date',
                 type: 'dateTime',
                 default: '',
-                description: 'Assinaturas canceladas até esta data',
+                description: 'Subscriptions canceled up to this date',
                 routing: {
                     send: {
                         type: 'query',
@@ -366,11 +366,11 @@ exports.subscriptionsFields = [
                 },
             },
             {
-                displayName: 'Data Cancelamento (Início)',
+                displayName: 'Cancellation Date (Start)',
                 name: 'cancelation_date',
                 type: 'dateTime',
                 default: '',
-                description: 'Assinaturas canceladas a partir desta data',
+                description: 'Subscriptions canceled from this date',
                 routing: {
                     send: {
                         type: 'query',
@@ -380,11 +380,11 @@ exports.subscriptionsFields = [
                 },
             },
             {
-                displayName: 'Data Final',
+                displayName: 'End Date',
                 name: 'end_accession_date',
                 type: 'dateTime',
                 default: '',
-                description: 'Filtrar assinaturas até esta data',
+                description: 'Filter subscriptions up to this date',
                 routing: {
                     send: {
                         type: 'query',
@@ -394,11 +394,11 @@ exports.subscriptionsFields = [
                 },
             },
             {
-                displayName: 'Data Inicial',
+                displayName: 'Start Date',
                 name: 'accession_date',
                 type: 'dateTime',
                 default: '',
-                description: 'Filtrar assinaturas a partir desta data',
+                description: 'Filter subscriptions from this date',
                 routing: {
                     send: {
                         type: 'query',
@@ -408,11 +408,11 @@ exports.subscriptionsFields = [
                 },
             },
             {
-                displayName: 'Data Transação (Fim)',
+                displayName: 'Transaction Date (End)',
                 name: 'end_transaction_date',
                 type: 'dateTime',
                 default: '',
-                description: 'Transações até esta data',
+                description: 'Transactions up to this date',
                 routing: {
                     send: {
                         type: 'query',
@@ -422,11 +422,11 @@ exports.subscriptionsFields = [
                 },
             },
             {
-                displayName: 'Data Transação (Início)',
+                displayName: 'Transaction Date (Start)',
                 name: 'transaction_date',
                 type: 'dateTime',
                 default: '',
-                description: 'Transações a partir desta data',
+                description: 'Transactions from this date',
                 routing: {
                     send: {
                         type: 'query',
@@ -436,11 +436,11 @@ exports.subscriptionsFields = [
                 },
             },
             {
-                displayName: 'Email Do Assinante',
+                displayName: 'Subscriber Email',
                 name: 'subscriber_email',
                 type: 'string',
                 default: '',
-                description: 'Filtrar por email do assinante',
+                description: 'Filter by subscriber email',
                 routing: {
                     send: {
                         type: 'query',
@@ -449,11 +449,11 @@ exports.subscriptionsFields = [
                 },
             },
             {
-                displayName: 'ID Do Plano',
+                displayName: 'Plan ID',
                 name: 'plan_id',
                 type: 'number',
                 default: 0,
-                description: 'Identificador único do plano de assinatura',
+                description: 'Unique identifier of the subscription plan',
                 routing: {
                     send: {
                         type: 'query',
@@ -462,11 +462,11 @@ exports.subscriptionsFields = [
                 },
             },
             {
-                displayName: 'ID Do Produto',
+                displayName: 'Product ID',
                 name: 'product_id',
                 type: 'number',
                 default: 0,
-                description: 'Filtrar por ID do produto',
+                description: 'Filter by product ID',
                 routing: {
                     send: {
                         type: 'query',
@@ -475,11 +475,11 @@ exports.subscriptionsFields = [
                 },
             },
             {
-                displayName: 'Nome Do Assinante',
+                displayName: 'Subscriber Name',
                 name: 'subscriber_name',
                 type: 'string',
                 default: '',
-                description: 'Filtrar por nome do assinante',
+                description: 'Filter by subscriber name',
                 routing: {
                     send: {
                         type: 'query',
@@ -488,7 +488,7 @@ exports.subscriptionsFields = [
                 },
             },
             {
-                displayName: 'Período De Teste',
+                displayName: 'Trial Period',
                 name: 'trial',
                 type: 'boolean',
                 default: false,
@@ -501,11 +501,11 @@ exports.subscriptionsFields = [
                 },
             },
             {
-                displayName: 'Plano',
+                displayName: 'Plan',
                 name: 'plan',
                 type: 'string',
                 default: '',
-                description: 'Filtrar por plano de assinatura',
+                description: 'Filter by subscription plan',
                 routing: {
                     send: {
                         type: 'query',
@@ -514,11 +514,11 @@ exports.subscriptionsFields = [
                 },
             },
             {
-                displayName: 'Próxima Cobrança (Fim)',
+                displayName: 'Next Charge (End)',
                 name: 'end_date_next_charge',
                 type: 'dateTime',
                 default: '',
-                description: 'Assinaturas com próxima cobrança até esta data',
+                description: 'Subscriptions with next charge up to this date',
                 routing: {
                     send: {
                         type: 'query',
@@ -528,11 +528,11 @@ exports.subscriptionsFields = [
                 },
             },
             {
-                displayName: 'Próxima Cobrança (Início)',
+                displayName: 'Next Charge (Start)',
                 name: 'date_next_charge',
                 type: 'dateTime',
                 default: '',
-                description: 'Assinaturas com próxima cobrança a partir desta data',
+                description: 'Subscriptions with next charge from this date',
                 routing: {
                     send: {
                         type: 'query',
@@ -546,19 +546,19 @@ exports.subscriptionsFields = [
                 name: 'status',
                 type: 'options',
                 options: [
-                    { name: 'Ativa', value: 'ACTIVE' },
-                    { name: 'Atrasada', value: 'DELAYED' },
-                    { name: 'Cancelada Pelo Admin', value: 'CANCELLED_BY_ADMIN' },
-                    { name: 'Cancelada Pelo Cliente', value: 'CANCELLED_BY_CUSTOMER' },
-                    { name: 'Cancelada pelo Vendedor', value: 'CANCELLED_BY_SELLER' },
-                    { name: 'Expirada', value: 'EXPIRED' },
-                    { name: 'Inativa', value: 'INACTIVE' },
-                    { name: 'Iniciada', value: 'STARTED' },
+                    { name: 'Active', value: 'ACTIVE' },
+                    { name: 'Delayed', value: 'DELAYED' },
+                    { name: 'Cancelled By Admin', value: 'CANCELLED_BY_ADMIN' },
+                    { name: 'Cancelled By Customer', value: 'CANCELLED_BY_CUSTOMER' },
+                    { name: 'Cancelled By Seller', value: 'CANCELLED_BY_SELLER' },
+                    { name: 'Expired', value: 'EXPIRED' },
+                    { name: 'Inactive', value: 'INACTIVE' },
+                    { name: 'Started', value: 'STARTED' },
                     { name: 'Trial', value: 'TRIAL' },
-                    { name: 'Vencida', value: 'OVERDUE' },
+                    { name: 'Overdue', value: 'OVERDUE' },
                 ],
                 default: 'ACTIVE',
-                description: 'Filtrar por status da assinatura',
+                description: 'Filter by subscription status',
                 routing: {
                     send: {
                         type: 'query',
@@ -567,21 +567,21 @@ exports.subscriptionsFields = [
                 },
             },
             {
-                displayName: 'Status Da Assinatura',
+                displayName: 'Subscription Status',
                 name: 'subscription_status',
                 type: 'options',
                 options: [
-                    { name: 'Ativa', value: 'ACTIVE' },
-                    { name: 'Atrasada', value: 'DELAYED' },
-                    { name: 'Cancelada Pelo Admin', value: 'CANCELLED_BY_ADMIN' },
-                    { name: 'Cancelada Pelo Cliente', value: 'CANCELLED_BY_CUSTOMER' },
-                    { name: 'Cancelada pelo Vendedor', value: 'CANCELLED_BY_SELLER' },
-                    { name: 'Inativa', value: 'INACTIVE' },
-                    { name: 'Iniciada', value: 'STARTED' },
-                    { name: 'Vencida', value: 'OVERDUE' },
+                    { name: 'Active', value: 'ACTIVE' },
+                    { name: 'Delayed', value: 'DELAYED' },
+                    { name: 'Cancelled By Admin', value: 'CANCELLED_BY_ADMIN' },
+                    { name: 'Cancelled By Customer', value: 'CANCELLED_BY_CUSTOMER' },
+                    { name: 'Cancelled By Seller', value: 'CANCELLED_BY_SELLER' },
+                    { name: 'Inactive', value: 'INACTIVE' },
+                    { name: 'Started', value: 'STARTED' },
+                    { name: 'Overdue', value: 'OVERDUE' },
                 ],
                 default: 'ACTIVE',
-                description: 'Filtrar por status da assinatura',
+                description: 'Filter by subscription status',
                 routing: {
                     send: {
                         type: 'query',
@@ -590,11 +590,11 @@ exports.subscriptionsFields = [
                 },
             },
             {
-                displayName: 'Status Da Compra',
+                displayName: 'Purchase Status',
                 name: 'purchase_status',
                 type: 'string',
                 default: '',
-                description: 'Filtrar por status da transação de compra',
+                description: 'Filter by purchase transaction status',
                 routing: {
                     send: {
                         type: 'query',
@@ -603,18 +603,18 @@ exports.subscriptionsFields = [
                 },
             },
             {
-                displayName: 'Status Da Recorrência',
+                displayName: 'Recurrency Status',
                 name: 'recurrency_status',
                 type: 'options',
                 options: [
                     { name: 'Chargeback', value: 'CHARGEBACK' },
-                    { name: 'Não Pago', value: 'NOT_PAID' },
-                    { name: 'Pago', value: 'PAID' },
-                    { name: 'Reclamado', value: 'CLAIMED' },
-                    { name: 'Reembolsado', value: 'REFUNDED' },
+                    { name: 'Not Paid', value: 'NOT_PAID' },
+                    { name: 'Paid', value: 'PAID' },
+                    { name: 'Claimed', value: 'CLAIMED' },
+                    { name: 'Refunded', value: 'REFUNDED' },
                 ],
                 default: 'PAID',
-                description: 'Filtrar por status do pagamento da recorrência',
+                description: 'Filter by recurrence payment status',
                 routing: {
                     send: {
                         type: 'query',
@@ -623,16 +623,16 @@ exports.subscriptionsFields = [
                 },
             },
             {
-                displayName: 'Tipo De Cobrança',
+                displayName: 'Billing Type',
                 name: 'billing_type',
                 type: 'options',
                 options: [
-                    { name: 'Assinatura', value: 'SUBSCRIPTION' },
+                    { name: 'Subscription', value: 'SUBSCRIPTION' },
                     { name: 'Smart Installment', value: 'SMART_INSTALLMENT' },
                     { name: 'Smart Recovery', value: 'SMART_RECOVERY' },
                 ],
                 default: 'SUBSCRIPTION',
-                description: 'Filtrar por tipo de cobrança recorrente',
+                description: 'Filter by recurring billing type',
                 routing: {
                     send: {
                         type: 'query',
@@ -641,24 +641,24 @@ exports.subscriptionsFields = [
                 },
             },
             {
-                displayName: 'Tipo De Pagamento',
+                displayName: 'Payment Type',
                 name: 'purchase_payment_type',
                 type: 'options',
                 options: [
-                    { name: 'Boleto', value: 'BILLET' },
-                    { name: 'Cartão De Crédito', value: 'CREDIT_CARD' },
-                    { name: 'Débito Direto', value: 'DIRECT_DEBIT' },
+                    { name: 'Billet', value: 'BILLET' },
+                    { name: 'Credit Card', value: 'CREDIT_CARD' },
+                    { name: 'Direct Debit', value: 'DIRECT_DEBIT' },
                     { name: 'Google Pay', value: 'GOOGLE_PAY' },
                     { name: 'PayPal', value: 'PAYPAL' },
-                    { name: 'PayPal Internacional', value: 'PAYPAL_INTERNACIONAL' },
+                    { name: 'International PayPal', value: 'PAYPAL_INTERNACIONAL' },
                     { name: 'PicPay', value: 'PICPAY' },
                     { name: 'Pix', value: 'PIX' },
                     { name: 'Samsung Pay', value: 'SAMSUNG_PAY' },
-                    { name: 'Transferência Bancária', value: 'DIRECT_BANK_TRANSFER' },
+                    { name: 'Bank Transfer', value: 'DIRECT_BANK_TRANSFER' },
                     { name: 'Wallet', value: 'WALLET' },
                 ],
                 default: 'CREDIT_CARD',
-                description: 'Filtrar por tipo de pagamento',
+                description: 'Filter by payment type',
                 routing: {
                     send: {
                         type: 'query',

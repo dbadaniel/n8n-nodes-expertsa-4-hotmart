@@ -2,7 +2,7 @@ import type { INodeProperties } from 'n8n-workflow';
 
 export const eventsOperations: INodeProperties[] = [
     {
-        displayName: 'Operação',
+        displayName: 'Operation',
         name: 'operation',
         type: 'options',
         noDataExpression: true,
@@ -13,10 +13,10 @@ export const eventsOperations: INodeProperties[] = [
         },
         options: [
             {
-                name: 'Informações Do Evento',
+                name: 'Event Information',
                 value: 'getInfo',
-                description: 'Obter informações de um evento',
-                action: 'Obter informa es do evento',
+                description: 'Get information about an event',
+                action: 'Get event info',
                 routing: {
                     request: {
                         method: 'GET',
@@ -25,10 +25,10 @@ export const eventsOperations: INodeProperties[] = [
                 },
             },
             {
-                name: 'Listar Participantes',
+                name: 'List Participants',
                 value: 'getParticipants',
-                description: 'Obter lista de ingressos e participantes do evento',
-                action: 'Listar participantes do evento',
+                description: 'Get the list of tickets and participants for the event',
+                action: 'List event participants',
                 routing: {
                     request: {
                         method: 'GET',
@@ -53,7 +53,7 @@ export const eventsOperations: INodeProperties[] = [
 
 export const eventsFields: INodeProperties[] = [
     {
-        displayName: 'ID Do Evento',
+        displayName: 'Event ID',
         name: 'eventId',
         type: 'number',
         required: true,
@@ -63,10 +63,10 @@ export const eventsFields: INodeProperties[] = [
             },
         },
         default: 0,
-        description: 'ID do produto (produto no formato Ingresso para Eventos)',
+        description: 'Product ID (product in the Event Ticket format)',
     },
     {
-        displayName: 'Retornar Todos',
+        displayName: 'Return All',
         name: 'returnAll',
         type: 'boolean',
         displayOptions: {
@@ -79,7 +79,7 @@ export const eventsFields: INodeProperties[] = [
         description: 'Whether to return all results or only up to a given limit',
     },
     {
-        displayName: 'Limite',
+        displayName: 'Limit',
         name: 'limit',
         type: 'number',
         displayOptions: {
@@ -103,10 +103,10 @@ export const eventsFields: INodeProperties[] = [
         },
     },
     {
-        displayName: 'Filtros',
+        displayName: 'Filters',
         name: 'filters',
         type: 'collection',
-        placeholder: 'Adicionar Filtro',
+        placeholder: 'Add Filter',
         default: {},
         displayOptions: {
             show: {
@@ -116,11 +116,11 @@ export const eventsFields: INodeProperties[] = [
         },
         options: [
             {
-                displayName: 'Email do Comprador',
+                displayName: 'Buyer Email',
                 name: 'buyer_email',
                 type: 'string',
                 default: '',
-                description: 'Filtrar por email do comprador',
+                description: 'Filter by buyer email',
                 routing: {
                     send: {
                         type: 'query',
@@ -129,11 +129,11 @@ export const eventsFields: INodeProperties[] = [
                 },
             },
             {
-                displayName: 'Email Do Participante',
+                displayName: 'Participant Email',
                 name: 'participant_email',
                 type: 'string',
                 default: '',
-                description: 'Filtrar por email do participante',
+                description: 'Filter by participant email',
                 routing: {
                     send: {
                         type: 'query',
@@ -142,11 +142,11 @@ export const eventsFields: INodeProperties[] = [
                 },
             },
             {
-                displayName: 'ID Do Ingresso',
+                displayName: 'Ticket ID',
                 name: 'id_eticket',
                 type: 'number',
                 default: 0,
-                description: 'ID sequencial do ingresso',
+                description: 'Sequential ticket ID',
                 routing: {
                     send: {
                         type: 'query',
@@ -155,11 +155,11 @@ export const eventsFields: INodeProperties[] = [
                 },
             },
             {
-                displayName: 'ID Do Lote',
+                displayName: 'Lot ID',
                 name: 'id_lot',
                 type: 'number',
                 default: 0,
-                description: 'ID do lote/categoria do ingresso',
+                description: 'ID of the ticket batch/category',
                 routing: {
                     send: {
                         type: 'query',
@@ -168,11 +168,11 @@ export const eventsFields: INodeProperties[] = [
                 },
             },
             {
-                displayName: 'QR Code Do Ingresso',
+                displayName: 'Ticket QR Code',
                 name: 'ticket_qr_code',
                 type: 'string',
                 default: '',
-                description: 'Código único do ingresso (QR Code)',
+                description: 'Unique ticket code (QR Code)',
                 routing: {
                     send: {
                         type: 'query',
@@ -181,17 +181,17 @@ export const eventsFields: INodeProperties[] = [
                 },
             },
             {
-                displayName: 'Status Do Check-In',
+                displayName: 'Check-In Status',
                 name: 'checkin_status',
                 type: 'options',
                 options: [
-                    { name: 'Concluído', value: 'CONCLUDED' },
-                    { name: 'Parcial', value: 'PARTIAL' },
-                    { name: 'Pendente', value: 'PENDING' },
-                    { name: 'Todos', value: 'ALL' },
+                    { name: 'Concluded', value: 'CONCLUDED' },
+                    { name: 'Partial', value: 'PARTIAL' },
+                    { name: 'Pending', value: 'PENDING' },
+                    { name: 'All', value: 'ALL' },
                 ],
                 default: 'ALL',
-                description: 'Filtrar por status de preenchimento dos dados',
+                description: 'Filter by data completion status',
                 routing: {
                     send: {
                         type: 'query',
@@ -200,21 +200,21 @@ export const eventsFields: INodeProperties[] = [
                 },
             },
             {
-                displayName: 'Status Do Ingresso',
+                displayName: 'Ticket Status',
                 name: 'ticket_status',
                 type: 'options',
                 options: [
                     { name: 'Chargeback', value: 'CHARGEBACK' },
-                    { name: 'Convite', value: 'INVITE' },
-                    { name: 'Convite Cancelado', value: 'INVITE_CANCELED' },
-                    { name: 'Disponível', value: 'AVAILABLE' },
-                    { name: 'Excluído', value: 'EXCLUDED' },
-                    { name: 'Reembolsado', value: 'REFUNDED' },
-                    { name: 'Reservado', value: 'RESERVED' },
-                    { name: 'Vendido', value: 'SOLD' },
+                    { name: 'Invite', value: 'INVITE' },
+                    { name: 'Invite Canceled', value: 'INVITE_CANCELED' },
+                    { name: 'Available', value: 'AVAILABLE' },
+                    { name: 'Excluded', value: 'EXCLUDED' },
+                    { name: 'Refunded', value: 'REFUNDED' },
+                    { name: 'Reserved', value: 'RESERVED' },
+                    { name: 'Sold', value: 'SOLD' },
                 ],
                 default: 'SOLD',
-                description: 'Filtrar por status do ingresso',
+                description: 'Filter by ticket status',
                 routing: {
                     send: {
                         type: 'query',
@@ -223,16 +223,16 @@ export const eventsFields: INodeProperties[] = [
                 },
             },
             {
-                displayName: 'Tipo Do Ingresso',
+                displayName: 'Ticket Type',
                 name: 'ticket_type',
                 type: 'options',
                 options: [
-                    { name: 'Gratuito', value: 'FREE' },
-                    { name: 'Pago', value: 'PAID' },
-                    { name: 'Todos', value: 'ALL' },
+                    { name: 'Free', value: 'FREE' },
+                    { name: 'Paid', value: 'PAID' },
+                    { name: 'All', value: 'ALL' },
                 ],
                 default: 'ALL',
-                description: 'Filtrar por tipo do ingresso',
+                description: 'Filter by ticket type',
                 routing: {
                     send: {
                         type: 'query',
@@ -241,11 +241,11 @@ export const eventsFields: INodeProperties[] = [
                 },
             },
             {
-                displayName: 'Última Atualização',
+                displayName: 'Last Update',
                 name: 'last_update',
                 type: 'number',
                 default: 0,
-                description: 'Data da última atualização (em milissegundos desde 1970-01-01)',
+                description: 'Date of the last update (in milliseconds since 1970-01-01)',
                 routing: {
                     send: {
                         type: 'query',

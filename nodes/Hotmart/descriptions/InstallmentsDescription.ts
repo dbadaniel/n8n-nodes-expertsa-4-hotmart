@@ -2,7 +2,7 @@ import type { INodeProperties } from 'n8n-workflow';
 
 export const installmentsOperations: INodeProperties[] = [
     {
-        displayName: 'Operação',
+        displayName: 'Operation',
         name: 'operation',
         type: 'options',
         noDataExpression: true,
@@ -13,10 +13,10 @@ export const installmentsOperations: INodeProperties[] = [
         },
         options: [
             {
-                name: 'Gerar Negociação',
+                name: 'Generate Negotiation',
                 value: 'negotiate',
-                description: 'Gerar boleto ou PIX para negociar parcelas em atraso de inadimplentes',
-                action: 'Gerar negocia o de parcelas',
+                description: 'Generate a billet or PIX to negotiate overdue installments for delinquent customers',
+                action: 'Generate installment negotiation',
             },
         ],
         default: 'negotiate',
@@ -24,9 +24,9 @@ export const installmentsOperations: INodeProperties[] = [
 ];
 
 export const installmentsFields: INodeProperties[] = [
-    // Gerar Negociação
+    // Generate Negotiation
     {
-        displayName: 'ID Da Assinatura',
+        displayName: 'Subscription ID',
         name: 'subscriptionId',
         type: 'string',
         required: true,
@@ -37,10 +37,10 @@ export const installmentsFields: INodeProperties[] = [
             },
         },
         default: '',
-        description: 'Número de identificação da assinatura na Hotmart',
+        description: 'Identification number of the subscription in Hotmart',
     },
     {
-        displayName: 'Recorrências',
+        displayName: 'Recurrences',
         name: 'recurrences',
         type: 'string',
         required: true,
@@ -52,10 +52,10 @@ export const installmentsFields: INodeProperties[] = [
         },
         default: '',
         placeholder: '1, 2, 3',
-        description: 'Números das recorrências para negociar (separados por vírgula). Máximo de 5 valores. Para assinaturas com Club, apenas a última parcela pode ser negociada.',
+        description: 'Recurrence numbers to negotiate (comma-separated). Maximum of 5 values. For subscriptions with Club, only the last installment can be negotiated.',
     },
     {
-        displayName: 'Tipo De Pagamento',
+        displayName: 'Payment Type',
         name: 'paymentType',
         type: 'options',
         required: true,
@@ -67,21 +67,21 @@ export const installmentsFields: INodeProperties[] = [
         },
         options: [
             {
-                name: 'Boleto Bancário',
+                name: 'Bank Billet',
                 value: 'BILLET',
-                description: 'Gerar boleto bancário (requer CPF/CNPJ)',
+                description: 'Generate a bank billet (requires CPF/CNPJ)',
             },
             {
                 name: 'PIX',
                 value: 'PIX',
-                description: 'Gerar código PIX para pagamento',
+                description: 'Generate a PIX code for payment',
             },
         ],
         default: 'PIX',
-        description: 'Meio de pagamento para a negociação',
+        description: 'Payment method for the negotiation',
     },
     {
-        displayName: 'CPF/CNPJ do Comprador',
+        displayName: 'Buyer CPF/CNPJ',
         name: 'document',
         type: 'string',
         required: true,
@@ -94,10 +94,10 @@ export const installmentsFields: INodeProperties[] = [
         },
         default: '',
         placeholder: '123.456.789-00',
-        description: 'CPF ou CNPJ do comprador inadimplente. Obrigatório para pagamento via Boleto.',
+        description: 'CPF or CNPJ of the delinquent buyer. Required for payment via Billet.',
     },
     {
-        displayName: 'Oferecer Desconto',
+        displayName: 'Offer Discount',
         name: 'offerDiscount',
         type: 'boolean',
         displayOptions: {
@@ -110,7 +110,7 @@ export const installmentsFields: INodeProperties[] = [
         description: 'Whether to offer a discount during negotiation',
     },
     {
-        displayName: 'Tipo De Desconto',
+        displayName: 'Discount Type',
         name: 'discountType',
         type: 'hidden',
         displayOptions: {
@@ -121,10 +121,10 @@ export const installmentsFields: INodeProperties[] = [
             },
         },
         default: 'CUSTOM',
-        description: 'Tipo de desconto (atualmente só CUSTOM é suportado pela API)',
+        description: 'Discount type (currently only CUSTOM is supported by the API)',
     },
     {
-        displayName: 'Valor Do Desconto',
+        displayName: 'Discount Value',
         name: 'discountValue',
         type: 'number',
         typeOptions: {
@@ -139,6 +139,6 @@ export const installmentsFields: INodeProperties[] = [
             },
         },
         default: 0,
-        description: 'Valor do desconto. Para CUSTOM, informe em reais (ex: 50.00). Para PERCENTAGE, informe o percentual (ex: 10 para 10%).',
+        description: 'Discount value. For CUSTOM, enter the amount (e.g. 50.00). For PERCENTAGE, enter the percentage (e.g. 10 for 10%).',
     },
 ];

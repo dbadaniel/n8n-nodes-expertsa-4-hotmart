@@ -13,7 +13,7 @@ class Hotmart {
             group: ['transform'],
             version: 1,
             subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-            description: 'Integração com a API da Hotmart com suporte a credenciais estáticas e tokens dinâmicos (modo SaaS).',
+            description: 'Integration with the Hotmart API, with support for static credentials and dynamic tokens (SaaS mode).',
             usableAsTool: true,
             defaults: {
                 name: 'Hotmart',
@@ -33,26 +33,26 @@ class Hotmart {
             ],
             properties: [
                 {
-                    displayName: 'Modo De Autenticação',
+                    displayName: 'Authentication Mode',
                     name: 'authMode',
                     type: 'options',
                     options: [
                         {
-                            name: 'Credenciais (Uso Pessoal)',
+                            name: 'Credentials (Personal Use)',
                             value: 'credentials',
-                            description: 'Usar credenciais salvas no n8n - ideal para uso pessoal/single-tenant',
+                            description: 'Use credentials saved in n8n - ideal for personal/single-tenant use',
                         },
                         {
-                            name: 'Token Dinâmico (Modo SaaS)',
+                            name: 'Dynamic Token (SaaS Mode)',
                             value: 'dynamic',
-                            description: 'Passar token de acesso dinamicamente - ideal para aplicações multi-tenant SaaS. Use a operação "Obter Access Token" para obter o token primeiro.',
+                            description: 'Pass the access token dynamically - ideal for multi-tenant SaaS applications. Use the "Get Access Token" operation to obtain the token first.',
                         },
                     ],
                     default: 'credentials',
-                    description: 'Escolha como autenticar com a API da Hotmart',
+                    description: 'Choose how to authenticate with the Hotmart API',
                 },
                 {
-                    displayName: 'Token De Acesso',
+                    displayName: 'Access Token',
                     name: 'accessToken',
                     type: 'string',
                     typeOptions: {
@@ -65,10 +65,10 @@ class Hotmart {
                         },
                     },
                     default: '',
-                    description: 'O token de acesso OAuth da Hotmart. Use a operação "Autenticação > Obter Access Token" para obter este token, ou passe de um node anterior.',
+                    description: 'The Hotmart OAuth access token. Use the "Authentication > Get Access Token" operation to obtain this token, or pass it from a previous node.',
                 },
                 {
-                    displayName: 'Ambiente',
+                    displayName: 'Environment',
                     name: 'environment',
                     type: 'options',
                     displayOptions: {
@@ -79,7 +79,7 @@ class Hotmart {
                     },
                     options: [
                         {
-                            name: 'Produção',
+                            name: 'Production',
                             value: 'production',
                         },
                         {
@@ -88,10 +88,10 @@ class Hotmart {
                         },
                     ],
                     default: 'production',
-                    description: 'O ambiente da Hotmart. IMPORTANTE: Credenciais de Produção só funcionam em Produção e vice-versa.',
+                    description: 'The Hotmart environment. IMPORTANT: Production credentials only work in Production and vice versa.',
                 },
                 {
-                    displayName: 'Incluir Metadados De Paginação',
+                    displayName: 'Include Pagination Metadata',
                     name: 'includePaginationMetadata',
                     type: 'boolean',
                     default: false,
@@ -103,41 +103,41 @@ class Hotmart {
                     },
                 },
                 {
-                    displayName: 'Recurso',
+                    displayName: 'Resource',
                     name: 'resource',
                     type: 'options',
                     noDataExpression: true,
                     options: [
                         {
-                            name: 'Área De Membro',
+                            name: 'Member Area',
                             value: 'members',
                         },
                         {
-                            name: 'Assinatura',
+                            name: 'Subscription',
                             value: 'subscriptions',
                         },
                         {
-                            name: 'Autenticação',
+                            name: 'Authentication',
                             value: 'auth',
                         },
                         {
-                            name: 'Cupom',
+                            name: 'Coupon',
                             value: 'coupons',
                         },
                         {
-                            name: 'Evento',
+                            name: 'Event',
                             value: 'events',
                         },
                         {
-                            name: 'Negociação De Parcela',
+                            name: 'Installment Negotiation',
                             value: 'installments',
                         },
                         {
-                            name: 'Produto',
+                            name: 'Product',
                             value: 'products',
                         },
                         {
-                            name: 'Venda',
+                            name: 'Sale',
                             value: 'sales',
                         },
                     ],
@@ -226,7 +226,7 @@ class Hotmart {
             accessToken = this.getNodeParameter('accessToken', 0, '');
             const environment = this.getNodeParameter('environment', 0, 'production');
             if (!accessToken) {
-                throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Token de Acesso é obrigatório no modo SaaS. Use a operação "Autenticação > Obter Access Token" primeiro.');
+                throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Access Token is required in SaaS mode. Use the "Authentication > Get Access Token" operation first.');
             }
             baseUrl = (0, GenericFunctions_1.getBaseUrl)(environment);
         }
@@ -404,7 +404,7 @@ class Hotmart {
                             const email = (filters.email || '').trim().replace(/["']/g, '');
                             if (!userId && !email) {
                                 throw new n8n_workflow_1.NodeApiError(this.getNode(), {
-                                    message: `No modo "Aulas Detalhadas", adicione o filtro "Email" ou "ID do Aluno (user_id)" para especificar qual aluno deseja consultar.`,
+                                    message: `In "Detailed Lessons" mode, add the "Email" or "Student ID (user_id)" filter to specify which student you want to query.`,
                                 });
                             }
                             const searchEmail = (email || (userId.includes('@') ? userId : '')).toLowerCase();
@@ -441,7 +441,7 @@ class Hotmart {
                                 }
                                 else {
                                     throw new n8n_workflow_1.NodeApiError(this.getNode(), {
-                                        message: `Nenhum aluno encontrado com o e-mail "${searchEmail}" na área de membros "${subdomain}".`,
+                                        message: `No student found with the email "${searchEmail}" in the member area "${subdomain}".`,
                                     });
                                 }
                             }
@@ -628,7 +628,7 @@ class Hotmart {
             }
             catch (error) {
                 const err = error;
-                const errorMessage = ((_c = (_b = err.response) === null || _b === void 0 ? void 0 : _b.data) === null || _c === void 0 ? void 0 : _c.message) || err.message || 'Erro desconhecido na requisição';
+                const errorMessage = ((_c = (_b = err.response) === null || _b === void 0 ? void 0 : _b.data) === null || _c === void 0 ? void 0 : _c.message) || err.message || 'Unknown error in request';
                 if (this.continueOnFail()) {
                     returnData.push({
                         json: { error: errorMessage },

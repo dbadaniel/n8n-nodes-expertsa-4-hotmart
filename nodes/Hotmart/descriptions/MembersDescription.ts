@@ -2,7 +2,7 @@ import type { INodeProperties } from 'n8n-workflow';
 
 export const membersOperations: INodeProperties[] = [
     {
-        displayName: 'Operação',
+        displayName: 'Operation',
         name: 'operation',
         type: 'options',
         noDataExpression: true,
@@ -13,16 +13,16 @@ export const membersOperations: INodeProperties[] = [
         },
         options: [
             {
-                name: 'Progresso Do Aluno',
+                name: 'Student Progress',
                 value: 'getStudentProgress',
-                description: 'Obter progresso do aluno (resumo com % ou histórico detalhado de aulas)',
-                action: 'Obter progresso do aluno',
+                description: 'Get student progress (summary with % or detailed lesson history)',
+                action: 'Get student progress',
             },
             {
-                name: 'Listar Alunos',
+                name: 'List Students',
                 value: 'getStudents',
-                description: 'Obter lista de alunos da área de membros',
-                action: 'Listar alunos da rea de membros',
+                description: 'Get the list of students in the member area',
+                action: 'List students in the member area',
                 routing: {
                     request: {
                         method: 'GET',
@@ -44,10 +44,10 @@ export const membersOperations: INodeProperties[] = [
                 },
             },
             {
-                name: 'Listar Módulos',
+                name: 'List Modules',
                 value: 'getModules',
-                description: 'Obter módulos de uma área de membros',
-                action: 'Listar m dulos da rea de membros',
+                description: 'Get the modules of a member area',
+                action: 'List modules in the member area',
                 routing: {
                     request: {
                         method: 'GET',
@@ -69,10 +69,10 @@ export const membersOperations: INodeProperties[] = [
                 },
             },
             {
-                name: 'Listar Páginas',
+                name: 'List Pages',
                 value: 'getPages',
-                description: 'Obter páginas de um módulo',
-                action: 'Listar p ginas de um m dulo',
+                description: 'Get the pages of a module',
+                action: 'List pages of a module',
                 routing: {
                     request: {
                         method: 'GET',
@@ -90,10 +90,10 @@ export const membersOperations: INodeProperties[] = [
 
 export const membersFields: INodeProperties[] = [
     // ----------------------------------
-    //         Comum: Subdomínio
+    //         Common: Subdomain
     // ----------------------------------
     {
-        displayName: 'Subdomínio',
+        displayName: 'Subdomain',
         name: 'subdomain',
         type: 'string',
         required: true,
@@ -104,25 +104,25 @@ export const membersFields: INodeProperties[] = [
             },
         },
         default: '',
-        description: 'O subdomínio da sua área de membros (ex: "meuproduto" de meuproduto.club.hotmart.com)',
+        description: 'The subdomain of your member area (e.g. "myproduct" from myproduct.club.hotmart.com)',
     },
     // ----------------------------------
-    //         Progresso do Aluno: Modo de Visualização
+    //         Student Progress: View Mode
     // ----------------------------------
     {
-        displayName: 'Modo De Visualização',
+        displayName: 'View Mode',
         name: 'progressMode',
         type: 'options',
         options: [
             {
-                name: 'Porcentagem / Resumo Geral',
+                name: 'Percentage / General Summary',
                 value: 'summary',
-                description: 'Traz a % de conclusão, total de aulas e aulas feitas (com filtro opcional por email)',
+                description: 'Provides the completion %, total lessons, and completed lessons (with optional filter by email)',
             },
             {
-                name: 'Aulas Detalhadas (Lição Por Lição)',
+                name: 'Detailed Lessons (Lesson By Lesson)',
                 value: 'detailed',
-                description: 'Traz o status detalhado de cada aula/lição do curso assistida pelo aluno',
+                description: 'Provides the detailed status of each lesson in the course watched by the student',
             },
         ],
         default: 'summary',
@@ -132,13 +132,13 @@ export const membersFields: INodeProperties[] = [
                 operation: ['getStudentProgress'],
             },
         },
-        description: 'Escolha se deseja o resumo de conclusão com a porcentagem (%) ou o detalhamento aula por aula',
+        description: 'Choose whether you want the completion summary with the percentage (%) or the lesson-by-lesson breakdown',
     },
     // ----------------------------------
-    //         Listar Páginas
+    //         List Pages
     // ----------------------------------
     {
-        displayName: 'ID Do Produto',
+        displayName: 'Product ID',
         name: 'productId',
         type: 'number',
         required: true,
@@ -149,7 +149,7 @@ export const membersFields: INodeProperties[] = [
             },
         },
         default: 0,
-        description: 'Identificador único (ID) do produto',
+        description: 'Unique identifier (ID) of the product',
         routing: {
             send: {
                 type: 'query',
@@ -158,7 +158,7 @@ export const membersFields: INodeProperties[] = [
         },
     },
     {
-        displayName: 'ID Do Módulo',
+        displayName: 'Module ID',
         name: 'moduleId',
         type: 'string',
         required: true,
@@ -169,13 +169,13 @@ export const membersFields: INodeProperties[] = [
             },
         },
         default: '',
-        description: 'O ID do módulo para obter as páginas',
+        description: 'The module ID to get the pages for',
     },
     // ----------------------------------
-    //         Listar Alunos / Módulos / Paginação
+    //         List Students / Modules / Pagination
     // ----------------------------------
     {
-        displayName: 'Retornar Todos',
+        displayName: 'Return All',
         name: 'returnAll',
         type: 'boolean',
         displayOptions: {
@@ -191,7 +191,7 @@ export const membersFields: INodeProperties[] = [
         description: 'Whether to return all results or only up to a given limit',
     },
     {
-        displayName: 'Limite',
+        displayName: 'Limit',
         name: 'limit',
         type: 'number',
         displayOptions: {
@@ -218,13 +218,13 @@ export const membersFields: INodeProperties[] = [
         },
     },
     // ----------------------------------
-    //         Filtros: Progresso do Aluno (Apenas Email e ID)
+    //         Filters: Student Progress (Email and ID Only)
     // ----------------------------------
     {
-        displayName: 'Filtros',
+        displayName: 'Filters',
         name: 'filters',
         type: 'collection',
-        placeholder: 'Adicionar Filtro',
+        placeholder: 'Add Filter',
         default: {},
         displayOptions: {
             show: {
@@ -238,27 +238,27 @@ export const membersFields: INodeProperties[] = [
                 name: 'email',
                 type: 'string',
                 default: '',
-                placeholder: 'ex: aluno@email.com',
-                description: 'Filtrar por e-mail do aluno',
+                placeholder: 'e.g. student@email.com',
+                description: 'Filter by student email',
             },
             {
-                displayName: 'ID Do Aluno (User_id)',
+                displayName: 'Student ID (User_id)',
                 name: 'userId',
                 type: 'string',
                 default: '',
-                placeholder: 'ex: 12345678',
-                description: 'Filtrar por ID do aluno na Hotmart',
+                placeholder: 'e.g. 12345678',
+                description: 'Filter by student ID in Hotmart',
             },
         ],
     },
     // ----------------------------------
-    //         Filtros: Listar Alunos / Módulos
+    //         Filters: List Students / Modules
     // ----------------------------------
     {
-        displayName: 'Filtros',
+        displayName: 'Filters',
         name: 'filters',
         type: 'collection',
-        placeholder: 'Adicionar Filtro',
+        placeholder: 'Add Filter',
         default: {},
         displayOptions: {
             show: {
@@ -271,9 +271,9 @@ export const membersFields: INodeProperties[] = [
                 displayName: 'Email',
                 name: 'email',
                 type: 'string',
-																placeholder: 'name@email.com',
+                placeholder: 'name@email.com',
                 default: '',
-                description: 'Filtrar por email do aluno',
+                description: 'Filter by student email',
                 routing: {
                     send: {
                         type: 'query',
@@ -282,7 +282,7 @@ export const membersFields: INodeProperties[] = [
                 },
             },
             {
-                displayName: 'Módulos Extras',
+                displayName: 'Extra Modules',
                 name: 'is_extra',
                 type: 'boolean',
                 default: false,
@@ -295,11 +295,11 @@ export const membersFields: INodeProperties[] = [
                 },
             },
             {
-                displayName: 'Nome',
+                displayName: 'Name',
                 name: 'name',
                 type: 'string',
                 default: '',
-                description: 'Filtrar por nome do aluno',
+                description: 'Filter by student name',
                 routing: {
                     send: {
                         type: 'query',
@@ -312,11 +312,11 @@ export const membersFields: INodeProperties[] = [
                 name: 'status',
                 type: 'options',
                 options: [
-                    { name: 'Ativo', value: 'ACTIVE' },
-                    { name: 'Inativo', value: 'INACTIVE' },
+                    { name: 'Active', value: 'ACTIVE' },
+                    { name: 'Inactive', value: 'INACTIVE' },
                 ],
                 default: 'ACTIVE',
-                description: 'Filtrar por status do aluno',
+                description: 'Filter by student status',
                 routing: {
                     send: {
                         type: 'query',
