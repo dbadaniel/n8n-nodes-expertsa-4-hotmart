@@ -657,19 +657,19 @@ export class HotmartTrigger implements INodeType {
 
     async webhook(this: IWebhookFunctions): Promise<IWebhookResponseData> {
         const bodyData = this.getBodyData() as IDataObject;
+        const headerData = this.getHeaderData();
         const webhookMode = this.getNodeParameter('webhookMode', 'standard') as string;
         const hottok = this.getNodeParameter('hottok') as string;
 
-        // Validate hottok if configured
+        // Validate hottok if configured.
+        // Hotmart sends it in the "X-Hotmart-Hottok" header; some legacy events also
+        // replicate it in the body, so that is checked as a fallback.
         if (hottok) {
-            const requestHottok = bodyData.hottok as string;
+            const requestHottok = (headerData['x-hotmart-hottok'] as string) || (bodyData.hottok as string);
             if (requestHottok !== hottok) {
-                return {
-                    webhookResponse: {
-                        status: 401,
-                        body: 'Unauthorized: invalid Hottok',
-                    },
-                };
+                const res = this.getResponseObject();
+                res.status(401).send('Unauthorized: invalid Hottok').end();
+                return { noWebhookResponse: true };
             }
         }
 
@@ -686,12 +686,9 @@ export class HotmartTrigger implements INodeType {
                 (event === 'CLUB_MODULE_COMPLETED' && ['CLUB_COURSE_COMPLETED', 'CLUB_MODULE_COMPLETED', 'CLUB_COMPLETED_MODULE'].includes(eventType));
 
             if (!isMatch) {
-                return {
-                    webhookResponse: {
-                        status: 200,
-                        body: 'Event ignored',
-                    },
-                };
+                const res = this.getResponseObject();
+                res.status(200).send('Event ignored').end();
+                return { noWebhookResponse: true };
             }
 
             return {
