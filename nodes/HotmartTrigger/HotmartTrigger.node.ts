@@ -285,9 +285,9 @@ export class HotmartTrigger implements INodeType {
                 },
                 options: [
                     {
-                        name: 'Cart Abandonment',
-                        value: 'PURCHASE_OUT_OF_SHOPPING_CART',
-                        description: 'Trigger when there is a cart abandonment',
+                        name: 'All Events',
+                        value: 'all',
+                        description: 'Trigger on any Hotmart webhook event',
                     },
                     {
                         name: 'Billet Printed',
@@ -295,44 +295,19 @@ export class HotmartTrigger implements INodeType {
                         description: 'Trigger when a billet is printed',
                     },
                     {
-                        name: 'Subscription Cancellation',
-                        value: 'SUBSCRIPTION_CANCELLATION',
-                        description: 'Trigger when a subscription is canceled',
+                        name: 'Billing Day Change',
+                        value: 'UPDATE_SUBSCRIPTION_CHARGE_DATE',
+                        description: 'Trigger when the subscription billing day is changed',
+                    },
+                    {
+                        name: 'Cart Abandonment',
+                        value: 'PURCHASE_OUT_OF_SHOPPING_CART',
+                        description: 'Trigger when there is a cart abandonment',
                     },
                     {
                         name: 'Chargeback',
                         value: 'PURCHASE_CHARGEBACK',
                         description: 'Trigger when a chargeback occurs',
-                    },
-                    {
-                        name: 'Purchase Approved',
-                        value: 'PURCHASE_APPROVED',
-                        description: 'Trigger when a purchase is approved',
-                    },
-                    {
-                        name: 'Purchase Delayed',
-                        value: 'PURCHASE_DELAYED',
-                        description: 'Trigger when a purchase is delayed',
-                    },
-                    {
-                        name: 'Purchase Canceled',
-                        value: 'PURCHASE_CANCELED',
-                        description: 'Trigger when a purchase is canceled',
-                    },
-                    {
-                        name: 'Purchase Complete',
-                        value: 'PURCHASE_COMPLETE',
-                        description: 'Trigger when a purchase is completed',
-                    },
-                    {
-                        name: 'Purchase Expired',
-                        value: 'PURCHASE_EXPIRED',
-                        description: 'Trigger when a purchase expires',
-                    },
-                    {
-                        name: 'Purchase Refunded',
-                        value: 'PURCHASE_REFUNDED',
-                        description: 'Trigger when a purchase is refunded',
                     },
                     {
                         name: 'Course Completed (Club)',
@@ -345,29 +320,54 @@ export class HotmartTrigger implements INodeType {
                         description: 'Trigger when a dispute is opened',
                     },
                     {
-                        name: 'Module Completed (Club)',
-                        value: 'CLUB_MODULE_COMPLETED',
-                        description: 'Trigger when a student completes a course module',
-                    },
-                    {
                         name: 'First Access (Club)',
                         value: 'CLUB_FIRST_ACCESS',
                         description: 'Trigger when a student accesses the course for the first time',
                     },
                     {
-                        name: 'All Events',
-                        value: 'all',
-                        description: 'Trigger on any Hotmart webhook event',
-                    },
-                    {
-                        name: 'Billing Day Change',
-                        value: 'UPDATE_SUBSCRIPTION_CHARGE_DATE',
-                        description: 'Trigger when the subscription billing day is changed',
+                        name: 'Module Completed (Club)',
+                        value: 'CLUB_MODULE_COMPLETED',
+                        description: 'Trigger when a student completes a course module',
                     },
                     {
                         name: 'Plan Switch',
                         value: 'SWITCH_PLAN',
                         description: 'Trigger when a subscription plan changes',
+                    },
+                    {
+                        name: 'Purchase Approved',
+                        value: 'PURCHASE_APPROVED',
+                        description: 'Trigger when a purchase is approved',
+                    },
+                    {
+                        name: 'Purchase Canceled',
+                        value: 'PURCHASE_CANCELED',
+                        description: 'Trigger when a purchase is canceled',
+                    },
+                    {
+                        name: 'Purchase Complete',
+                        value: 'PURCHASE_COMPLETE',
+                        description: 'Trigger when a purchase is completed',
+                    },
+                    {
+                        name: 'Purchase Delayed',
+                        value: 'PURCHASE_DELAYED',
+                        description: 'Trigger when a purchase is delayed',
+                    },
+                    {
+                        name: 'Purchase Expired',
+                        value: 'PURCHASE_EXPIRED',
+                        description: 'Trigger when a purchase expires',
+                    },
+                    {
+                        name: 'Purchase Refunded',
+                        value: 'PURCHASE_REFUNDED',
+                        description: 'Trigger when a purchase is refunded',
+                    },
+                    {
+                        name: 'Subscription Cancellation',
+                        value: 'SUBSCRIPTION_CANCELLATION',
+                        description: 'Trigger when a subscription is canceled',
                     },
                 ],
                 default: 'all',

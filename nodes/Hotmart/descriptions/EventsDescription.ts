@@ -129,6 +129,51 @@ export const eventsFields: INodeProperties[] = [
                 },
             },
             {
+                displayName: 'Check-In Status',
+                name: 'checkin_status',
+                type: 'options',
+                options: [
+                    { name: 'All', value: 'ALL' },
+                    { name: 'Concluded', value: 'CONCLUDED' },
+                    { name: 'Partial', value: 'PARTIAL' },
+                    { name: 'Pending', value: 'PENDING' },
+                ],
+                default: 'ALL',
+                description: 'Filter by data completion status',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'checkin_status',
+                    },
+                },
+            },
+            {
+                displayName: 'Last Update',
+                name: 'last_update',
+                type: 'number',
+                default: 0,
+                description: 'Date of the last update (in milliseconds since 1970-01-01)',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'last_update',
+                    },
+                },
+            },
+            {
+                displayName: 'Lot ID',
+                name: 'id_lot',
+                type: 'number',
+                default: 0,
+                description: 'ID of the ticket batch/category',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'id_lot',
+                    },
+                },
+            },
+            {
                 displayName: 'Participant Email',
                 name: 'participant_email',
                 type: 'string',
@@ -155,19 +200,6 @@ export const eventsFields: INodeProperties[] = [
                 },
             },
             {
-                displayName: 'Lot ID',
-                name: 'id_lot',
-                type: 'number',
-                default: 0,
-                description: 'ID of the ticket batch/category',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'id_lot',
-                    },
-                },
-            },
-            {
                 displayName: 'Ticket QR Code',
                 name: 'ticket_qr_code',
                 type: 'string',
@@ -181,34 +213,15 @@ export const eventsFields: INodeProperties[] = [
                 },
             },
             {
-                displayName: 'Check-In Status',
-                name: 'checkin_status',
-                type: 'options',
-                options: [
-                    { name: 'Concluded', value: 'CONCLUDED' },
-                    { name: 'Partial', value: 'PARTIAL' },
-                    { name: 'Pending', value: 'PENDING' },
-                    { name: 'All', value: 'ALL' },
-                ],
-                default: 'ALL',
-                description: 'Filter by data completion status',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'checkin_status',
-                    },
-                },
-            },
-            {
                 displayName: 'Ticket Status',
                 name: 'ticket_status',
                 type: 'options',
                 options: [
+                    { name: 'Available', value: 'AVAILABLE' },
                     { name: 'Chargeback', value: 'CHARGEBACK' },
+                    { name: 'Excluded', value: 'EXCLUDED' },
                     { name: 'Invite', value: 'INVITE' },
                     { name: 'Invite Canceled', value: 'INVITE_CANCELED' },
-                    { name: 'Available', value: 'AVAILABLE' },
-                    { name: 'Excluded', value: 'EXCLUDED' },
                     { name: 'Refunded', value: 'REFUNDED' },
                     { name: 'Reserved', value: 'RESERVED' },
                     { name: 'Sold', value: 'SOLD' },
@@ -227,9 +240,9 @@ export const eventsFields: INodeProperties[] = [
                 name: 'ticket_type',
                 type: 'options',
                 options: [
+                    { name: 'All', value: 'ALL' },
                     { name: 'Free', value: 'FREE' },
                     { name: 'Paid', value: 'PAID' },
-                    { name: 'All', value: 'ALL' },
                 ],
                 default: 'ALL',
                 description: 'Filter by ticket type',
@@ -237,19 +250,6 @@ export const eventsFields: INodeProperties[] = [
                     send: {
                         type: 'query',
                         property: 'ticket_type',
-                    },
-                },
-            },
-            {
-                displayName: 'Last Update',
-                name: 'last_update',
-                type: 'number',
-                default: 0,
-                description: 'Date of the last update (in milliseconds since 1970-01-01)',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'last_update',
                     },
                 },
             },

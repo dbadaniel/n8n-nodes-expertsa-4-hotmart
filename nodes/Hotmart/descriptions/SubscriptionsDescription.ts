@@ -13,21 +13,6 @@ export const subscriptionsOperations: INodeProperties[] = [
         },
         options: [
             {
-                name: 'Change Billing Date',
-                value: 'changeBillingDate',
-                description: 'Change the subscription billing date',
-                action: 'Change billing date',
-                routing: {
-                    request: {
-                        method: 'PATCH',
-                        url: '=/payments/api/v1/subscriptions/{{$parameter.subscriberCode}}',
-                        body: {
-                            due_day: '={{$parameter.dueDay}}',
-                        },
-                    },
-                },
-            },
-            {
                 name: 'Cancel Subscription',
                 value: 'cancel',
                 description: 'Cancel a subscription',
@@ -52,43 +37,24 @@ export const subscriptionsOperations: INodeProperties[] = [
                 },
             },
             {
-                name: 'Subscription Purchases',
-                value: 'getPurchases',
-                description: 'Get subscription purchases',
-                action: 'List subscription purchases',
+                name: 'Change Billing Date',
+                value: 'changeBillingDate',
+                description: 'Change the subscription billing date',
+                action: 'Change billing date',
                 routing: {
                     request: {
-                        method: 'GET',
-                        url: '/payments/api/v1/subscriptions/purchases',
-                    },
-                    output: {
-                        postReceive: [
-                            {
-                                type: 'rootProperty',
-                                properties: {
-                                    property: 'items',
-                                },
-                            },
-                        ],
-                    },
-                },
-            },
-            {
-                name: 'Subscriber Purchases',
-                value: 'getSubscriberPurchases',
-                description: 'Get the purchases of a specific subscriber',
-                action: 'List subscriber purchases',
-                routing: {
-                    request: {
-                        method: 'GET',
-                        url: '=/payments/api/v1/subscriptions/{{$parameter.subscriberCode}}/purchases',
+                        method: 'PATCH',
+                        url: '=/payments/api/v1/subscriptions/{{$parameter.subscriberCode}}',
+                        body: {
+                            due_day: '={{$parameter.dueDay}}',
+                        },
                     },
                 },
             },
             {
                 name: 'Get Many',
                 value: 'getAll',
-                description: 'Get all subscriptions',
+                description: 'Get many subscriptions',
                 action: 'List all subscriptions',
                 routing: {
                     request: {
@@ -132,14 +98,36 @@ export const subscriptionsOperations: INodeProperties[] = [
                 },
             },
             {
-                name: 'Subscriptions Summary',
-                value: 'getSummary',
-                description: 'Get the subscriptions summary',
-                action: 'Get subscriptions summary',
+                name: 'Subscriber Purchases',
+                value: 'getSubscriberPurchases',
+                description: 'Get the purchases of a specific subscriber',
+                action: 'List subscriber purchases',
                 routing: {
                     request: {
                         method: 'GET',
-                        url: '/payments/api/v1/subscriptions/summary',
+                        url: '=/payments/api/v1/subscriptions/{{$parameter.subscriberCode}}/purchases',
+                    },
+                },
+            },
+            {
+                name: 'Subscription Purchases',
+                value: 'getPurchases',
+                description: 'Get subscription purchases',
+                action: 'List subscription purchases',
+                routing: {
+                    request: {
+                        method: 'GET',
+                        url: '/payments/api/v1/subscriptions/purchases',
+                    },
+                    output: {
+                        postReceive: [
+                            {
+                                type: 'rootProperty',
+                                properties: {
+                                    property: 'items',
+                                },
+                            },
+                        ],
                     },
                 },
             },
@@ -162,6 +150,18 @@ export const subscriptionsOperations: INodeProperties[] = [
                                 },
                             },
                         ],
+                    },
+                },
+            },
+            {
+                name: 'Subscriptions Summary',
+                value: 'getSummary',
+                description: 'Get the subscriptions summary',
+                action: 'Get subscriptions summary',
+                routing: {
+                    request: {
+                        method: 'GET',
+                        url: '/payments/api/v1/subscriptions/summary',
                     },
                 },
             },
@@ -320,41 +320,20 @@ export const subscriptionsFields: INodeProperties[] = [
         },
         options: [
             {
-                displayName: 'Offer Code',
-                name: 'offer_code',
-                type: 'string',
-                default: '',
-                description: 'Filter by offer code',
+                displayName: 'Billing Type',
+                name: 'billing_type',
+                type: 'options',
+                options: [
+                    { name: 'Smart Installment', value: 'SMART_INSTALLMENT' },
+                    { name: 'Smart Recovery', value: 'SMART_RECOVERY' },
+                    { name: 'Subscription', value: 'SUBSCRIPTION' },
+                ],
+                default: 'SUBSCRIPTION',
+                description: 'Filter by recurring billing type',
                 routing: {
                     send: {
                         type: 'query',
-                        property: 'offer_code',
-                    },
-                },
-            },
-            {
-                displayName: 'Transaction Code',
-                name: 'transaction',
-                type: 'string',
-                default: '',
-                description: 'Filter by transaction code',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'transaction',
-                    },
-                },
-            },
-            {
-                displayName: 'Subscriber Code',
-                name: 'subscriber_code',
-                type: 'string',
-                default: '',
-                description: 'Filter by subscriber code',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'subscriber_code',
+                        property: 'billing_type',
                     },
                 },
             },
@@ -401,6 +380,145 @@ export const subscriptionsFields: INodeProperties[] = [
                 },
             },
             {
+                displayName: 'Next Charge (End)',
+                name: 'end_date_next_charge',
+                type: 'dateTime',
+                default: '',
+                description: 'Subscriptions with next charge up to this date',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'end_date_next_charge',
+                        value: '={{new Date($value).getTime()}}',
+                    },
+                },
+            },
+            {
+                displayName: 'Next Charge (Start)',
+                name: 'date_next_charge',
+                type: 'dateTime',
+                default: '',
+                description: 'Subscriptions with next charge from this date',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'date_next_charge',
+                        value: '={{new Date($value).getTime()}}',
+                    },
+                },
+            },
+            {
+                displayName: 'Offer Code',
+                name: 'offer_code',
+                type: 'string',
+                default: '',
+                description: 'Filter by offer code',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'offer_code',
+                    },
+                },
+            },
+            {
+                displayName: 'Payment Type',
+                name: 'purchase_payment_type',
+                type: 'options',
+                options: [
+                    { name: 'Bank Transfer', value: 'DIRECT_BANK_TRANSFER' },
+                    { name: 'Billet', value: 'BILLET' },
+                    { name: 'Credit Card', value: 'CREDIT_CARD' },
+                    { name: 'Direct Debit', value: 'DIRECT_DEBIT' },
+                    { name: 'Google Pay', value: 'GOOGLE_PAY' },
+                    { name: 'International PayPal', value: 'PAYPAL_INTERNACIONAL' },
+                    { name: 'PayPal', value: 'PAYPAL' },
+                    { name: 'PicPay', value: 'PICPAY' },
+                    { name: 'Pix', value: 'PIX' },
+                    { name: 'Samsung Pay', value: 'SAMSUNG_PAY' },
+                    { name: 'Wallet', value: 'WALLET' },
+                ],
+                default: 'CREDIT_CARD',
+                description: 'Filter by payment type',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'purchase_payment_type',
+                    },
+                },
+            },
+            {
+                displayName: 'Plan',
+                name: 'plan',
+                type: 'string',
+                default: '',
+                description: 'Filter by subscription plan',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'plan',
+                    },
+                },
+            },
+            {
+                displayName: 'Plan ID',
+                name: 'plan_id',
+                type: 'number',
+                default: 0,
+                description: 'Unique identifier of the subscription plan',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'plan_id',
+                    },
+                },
+            },
+            {
+                displayName: 'Product ID',
+                name: 'product_id',
+                type: 'number',
+                default: 0,
+                description: 'Filter by product ID',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'product_id',
+                    },
+                },
+            },
+            {
+                displayName: 'Purchase Status',
+                name: 'purchase_status',
+                type: 'string',
+                default: '',
+                description: 'Filter by purchase transaction status',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'purchase_status',
+                    },
+                },
+            },
+            {
+                displayName: 'Recurrency Status',
+                name: 'recurrency_status',
+                type: 'options',
+                options: [
+                    { name: 'Chargeback', value: 'CHARGEBACK' },
+                    { name: 'Claimed', value: 'CLAIMED' },
+                    { name: 'Not Paid', value: 'NOT_PAID' },
+                    { name: 'Paid', value: 'PAID' },
+                    { name: 'Refunded', value: 'REFUNDED' },
+                ],
+                default: 'PAID',
+                description: 'Filter by recurrence payment status',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'recurrency_status',
+                    },
+                },
+            },
+            {
                 displayName: 'Start Date',
                 name: 'accession_date',
                 type: 'dateTime',
@@ -411,6 +529,106 @@ export const subscriptionsFields: INodeProperties[] = [
                         type: 'query',
                         property: 'accession_date',
                         value: '={{new Date($value).getTime()}}',
+                    },
+                },
+            },
+            {
+                displayName: 'Status',
+                name: 'status',
+                type: 'options',
+                options: [
+                    { name: 'Active', value: 'ACTIVE' },
+                    { name: 'Cancelled By Admin', value: 'CANCELLED_BY_ADMIN' },
+                    { name: 'Cancelled By Customer', value: 'CANCELLED_BY_CUSTOMER' },
+                    { name: 'Cancelled By Seller', value: 'CANCELLED_BY_SELLER' },
+                    { name: 'Delayed', value: 'DELAYED' },
+                    { name: 'Expired', value: 'EXPIRED' },
+                    { name: 'Inactive', value: 'INACTIVE' },
+                    { name: 'Overdue', value: 'OVERDUE' },
+                    { name: 'Started', value: 'STARTED' },
+                    { name: 'Trial', value: 'TRIAL' },
+                ],
+                default: 'ACTIVE',
+                description: 'Filter by subscription status',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'status',
+                    },
+                },
+            },
+            {
+                displayName: 'Subscriber Code',
+                name: 'subscriber_code',
+                type: 'string',
+                default: '',
+                description: 'Filter by subscriber code',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'subscriber_code',
+                    },
+                },
+            },
+            {
+                displayName: 'Subscriber Email',
+                name: 'subscriber_email',
+                type: 'string',
+                default: '',
+                description: 'Filter by subscriber email',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'subscriber_email',
+                    },
+                },
+            },
+            {
+                displayName: 'Subscriber Name',
+                name: 'subscriber_name',
+                type: 'string',
+                default: '',
+                description: 'Filter by subscriber name',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'subscriber_name',
+                    },
+                },
+            },
+            {
+                displayName: 'Subscription Status',
+                name: 'subscription_status',
+                type: 'options',
+                options: [
+                    { name: 'Active', value: 'ACTIVE' },
+                    { name: 'Cancelled By Admin', value: 'CANCELLED_BY_ADMIN' },
+                    { name: 'Cancelled By Customer', value: 'CANCELLED_BY_CUSTOMER' },
+                    { name: 'Cancelled By Seller', value: 'CANCELLED_BY_SELLER' },
+                    { name: 'Delayed', value: 'DELAYED' },
+                    { name: 'Inactive', value: 'INACTIVE' },
+                    { name: 'Overdue', value: 'OVERDUE' },
+                    { name: 'Started', value: 'STARTED' },
+                ],
+                default: 'ACTIVE',
+                description: 'Filter by subscription status',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'subscription_status',
+                    },
+                },
+            },
+            {
+                displayName: 'Transaction Code',
+                name: 'transaction',
+                type: 'string',
+                default: '',
+                description: 'Filter by transaction code',
+                routing: {
+                    send: {
+                        type: 'query',
+                        property: 'transaction',
                     },
                 },
             },
@@ -443,58 +661,6 @@ export const subscriptionsFields: INodeProperties[] = [
                 },
             },
             {
-                displayName: 'Subscriber Email',
-                name: 'subscriber_email',
-                type: 'string',
-                default: '',
-                description: 'Filter by subscriber email',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'subscriber_email',
-                    },
-                },
-            },
-            {
-                displayName: 'Plan ID',
-                name: 'plan_id',
-                type: 'number',
-                default: 0,
-                description: 'Unique identifier of the subscription plan',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'plan_id',
-                    },
-                },
-            },
-            {
-                displayName: 'Product ID',
-                name: 'product_id',
-                type: 'number',
-                default: 0,
-                description: 'Filter by product ID',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'product_id',
-                    },
-                },
-            },
-            {
-                displayName: 'Subscriber Name',
-                name: 'subscriber_name',
-                type: 'string',
-                default: '',
-                description: 'Filter by subscriber name',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'subscriber_name',
-                    },
-                },
-            },
-            {
                 displayName: 'Trial Period',
                 name: 'trial',
                 type: 'boolean',
@@ -504,172 +670,6 @@ export const subscriptionsFields: INodeProperties[] = [
                     send: {
                         type: 'query',
                         property: 'trial',
-                    },
-                },
-            },
-            {
-                displayName: 'Plan',
-                name: 'plan',
-                type: 'string',
-                default: '',
-                description: 'Filter by subscription plan',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'plan',
-                    },
-                },
-            },
-            {
-                displayName: 'Next Charge (End)',
-                name: 'end_date_next_charge',
-                type: 'dateTime',
-                default: '',
-                description: 'Subscriptions with next charge up to this date',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'end_date_next_charge',
-                        value: '={{new Date($value).getTime()}}',
-                    },
-                },
-            },
-            {
-                displayName: 'Next Charge (Start)',
-                name: 'date_next_charge',
-                type: 'dateTime',
-                default: '',
-                description: 'Subscriptions with next charge from this date',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'date_next_charge',
-                        value: '={{new Date($value).getTime()}}',
-                    },
-                },
-            },
-            {
-                displayName: 'Status',
-                name: 'status',
-                type: 'options',
-                options: [
-                    { name: 'Active', value: 'ACTIVE' },
-                    { name: 'Delayed', value: 'DELAYED' },
-                    { name: 'Cancelled By Admin', value: 'CANCELLED_BY_ADMIN' },
-                    { name: 'Cancelled By Customer', value: 'CANCELLED_BY_CUSTOMER' },
-                    { name: 'Cancelled By Seller', value: 'CANCELLED_BY_SELLER' },
-                    { name: 'Expired', value: 'EXPIRED' },
-                    { name: 'Inactive', value: 'INACTIVE' },
-                    { name: 'Started', value: 'STARTED' },
-                    { name: 'Trial', value: 'TRIAL' },
-                    { name: 'Overdue', value: 'OVERDUE' },
-                ],
-                default: 'ACTIVE',
-                description: 'Filter by subscription status',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'status',
-                    },
-                },
-            },
-            {
-                displayName: 'Subscription Status',
-                name: 'subscription_status',
-                type: 'options',
-                options: [
-                    { name: 'Active', value: 'ACTIVE' },
-                    { name: 'Delayed', value: 'DELAYED' },
-                    { name: 'Cancelled By Admin', value: 'CANCELLED_BY_ADMIN' },
-                    { name: 'Cancelled By Customer', value: 'CANCELLED_BY_CUSTOMER' },
-                    { name: 'Cancelled By Seller', value: 'CANCELLED_BY_SELLER' },
-                    { name: 'Inactive', value: 'INACTIVE' },
-                    { name: 'Started', value: 'STARTED' },
-                    { name: 'Overdue', value: 'OVERDUE' },
-                ],
-                default: 'ACTIVE',
-                description: 'Filter by subscription status',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'subscription_status',
-                    },
-                },
-            },
-            {
-                displayName: 'Purchase Status',
-                name: 'purchase_status',
-                type: 'string',
-                default: '',
-                description: 'Filter by purchase transaction status',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'purchase_status',
-                    },
-                },
-            },
-            {
-                displayName: 'Recurrency Status',
-                name: 'recurrency_status',
-                type: 'options',
-                options: [
-                    { name: 'Chargeback', value: 'CHARGEBACK' },
-                    { name: 'Not Paid', value: 'NOT_PAID' },
-                    { name: 'Paid', value: 'PAID' },
-                    { name: 'Claimed', value: 'CLAIMED' },
-                    { name: 'Refunded', value: 'REFUNDED' },
-                ],
-                default: 'PAID',
-                description: 'Filter by recurrence payment status',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'recurrency_status',
-                    },
-                },
-            },
-            {
-                displayName: 'Billing Type',
-                name: 'billing_type',
-                type: 'options',
-                options: [
-                    { name: 'Subscription', value: 'SUBSCRIPTION' },
-                    { name: 'Smart Installment', value: 'SMART_INSTALLMENT' },
-                    { name: 'Smart Recovery', value: 'SMART_RECOVERY' },
-                ],
-                default: 'SUBSCRIPTION',
-                description: 'Filter by recurring billing type',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'billing_type',
-                    },
-                },
-            },
-            {
-                displayName: 'Payment Type',
-                name: 'purchase_payment_type',
-                type: 'options',
-                options: [
-                    { name: 'Billet', value: 'BILLET' },
-                    { name: 'Credit Card', value: 'CREDIT_CARD' },
-                    { name: 'Direct Debit', value: 'DIRECT_DEBIT' },
-                    { name: 'Google Pay', value: 'GOOGLE_PAY' },
-                    { name: 'PayPal', value: 'PAYPAL' },
-                    { name: 'International PayPal', value: 'PAYPAL_INTERNACIONAL' },
-                    { name: 'PicPay', value: 'PICPAY' },
-                    { name: 'Pix', value: 'PIX' },
-                    { name: 'Samsung Pay', value: 'SAMSUNG_PAY' },
-                    { name: 'Bank Transfer', value: 'DIRECT_BANK_TRANSFER' },
-                    { name: 'Wallet', value: 'WALLET' },
-                ],
-                default: 'CREDIT_CARD',
-                description: 'Filter by payment type',
-                routing: {
-                    send: {
-                        type: 'query',
-                        property: 'purchase_payment_type',
                     },
                 },
             },

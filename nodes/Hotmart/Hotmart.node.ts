@@ -141,14 +141,6 @@ export class Hotmart implements INodeType {
                 noDataExpression: true,
                 options: [
                     {
-                        name: 'Member Area',
-                        value: 'members',
-                    },
-                    {
-                        name: 'Subscription',
-                        value: 'subscriptions',
-                    },
-                    {
                         name: 'Authentication',
                         value: 'auth',
                     },
@@ -165,12 +157,20 @@ export class Hotmart implements INodeType {
                         value: 'installments',
                     },
                     {
+                        name: 'Member Area',
+                        value: 'members',
+                    },
+                    {
                         name: 'Product',
                         value: 'products',
                     },
                     {
                         name: 'Sale',
                         value: 'sales',
+                    },
+                    {
+                        name: 'Subscription',
+                        value: 'subscriptions',
                     },
                 ],
                 default: 'sales',
